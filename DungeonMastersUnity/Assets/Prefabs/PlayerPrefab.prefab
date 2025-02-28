@@ -59,7 +59,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -976239929
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &5448942887959711809
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: slidrex
+  m_text: NOTHING
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -340,7 +340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f51606e594437b43befc459c32157be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _username: {fileID: 1213207107251357271}
 --- !u!114 &1246332278349568269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,3 +352,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a31abe5635454ef429d2deb07ce98f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userName: {fileID: 1213207107251357271}

@@ -17,7 +17,7 @@ public class GameLogic : MonoBehaviour
             }
         }
     }
-    public GameObject PlayerPrefab;
+    [field: SerializeField] public GameObject PlayerPrefab {get; private set;}
     private void Awake()
     {
         _singleton = this;

@@ -38,6 +38,7 @@ public class NetworkManager : MonoBehaviour
     [SerializeField] private TMP_InputField _ipInput;
     [SerializeField] private TMP_InputField _usernameInput;
     [SerializeField] private GameObject _authScreen;
+    [SerializeField] private GameObject _gameScreen;
     public Client Client;
 
 
@@ -49,9 +50,9 @@ public class NetworkManager : MonoBehaviour
     {
         _connectButton.onClick.AddListener(ConnectToServer);
     }
-    private void Osable()
+    private void OnDisable()
     {
-        
+        _connectButton.onClick.RemoveListener(ConnectToServer);
     }
     void Start()
     {
@@ -68,13 +69,14 @@ public class NetworkManager : MonoBehaviour
     {
         string username = _usernameInput.text;
         if(username == "" || username.Length < 3){
-            Console.WriteLine("Error: Invalid username. pick other one");
+            Debug.LogError("Error: Invalid username. pick other one");
         }
         Client.Connect($"{_ipInput.text}:{_port}"); 
         Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendName);
         message.AddString(username);
         NetworkManager.Singleton.Client.Send(message);
         _authScreen.SetActive(false);
+        _gameScreen.SetActive(true);
     }
     
 

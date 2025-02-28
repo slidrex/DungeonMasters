@@ -1,11 +1,13 @@
 using UnityEngine;
 using Riptide;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-
     private bool[] inputs = new bool[4];
-
+    [SerializeField] private TextMeshProUGUI userName;
+    public ushort Id { get; set; }
+    public bool IsLocal { get; set; }
 
     private void Update()
     {
@@ -22,15 +24,26 @@ public class PlayerController : MonoBehaviour
             inputs[3] = true;
     }
 
+    public void SetUsername(string username)
+    {
+        userName.text = username;
+    }
+    private void OnDestroy()
+    {
+        PlayerManager.list.Remove(Id);
+    }
+
     private void FixedUpdate()
     {
         if(inputs[0] || inputs[1] || inputs[2] || inputs[3] == true){
-        SendInput();
-
+            SendInput();
         }
 
         for (int i = 0; i < inputs.Length; i++)
             inputs[i] = false;
+    }
+    public void Move(Vector2 position){
+        transform.position = position;
     }
 
     #region Messages
