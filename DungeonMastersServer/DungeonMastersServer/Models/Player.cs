@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models
 {
-    class Player
+    public class Player
     {
         public readonly string Username;
         public Vector2 Position { get; set; }
