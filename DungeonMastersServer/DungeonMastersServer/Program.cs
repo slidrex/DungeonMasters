@@ -11,7 +11,7 @@ namespace DungeonMastersServer
         private static void RegisterMessageHandlers()
         {
 
-            Register(new PlayerMessageHandler());
+            Register(new PlayerMessageHandler(), new ChatMessageHandler());
         }
 
         private static NetworkManager _networkManager = null;

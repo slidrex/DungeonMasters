@@ -47,6 +47,7 @@ namespace Multiplayer.MessageHandlers
             chat.AddMessage(message);
         }
         
+        [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
         public static void SendChatMessage(string message)
         {
             _singleton.SendMsg(message);

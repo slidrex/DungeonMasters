@@ -9,11 +9,13 @@ enum ServerToClientId
     playerConnected = 0,
     playerDisconnected = 1,
     playerMovement = 2,
+    playerChatMessage = 3
 }
 enum ClientToServerId
 {
     sendName = 0,
-    sendMoveInputs = 1
+    sendMoveInputs = 1,
+    sendChatMessage = 2
 }
 public class NetworkManager : MonoBehaviour
 {
@@ -79,6 +81,11 @@ public class NetworkManager : MonoBehaviour
         _gameScreen.SetActive(true);
     }
     
+    private void SendMsg(string chatMessage) {
+        Message message = message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendChatMessage);
+        message.AddString(chatMessage);
+        NetworkManager.Singleton.Client.Send(message);
+    }
 
     // Update is called once per frame
     private void FixedUpdate()
