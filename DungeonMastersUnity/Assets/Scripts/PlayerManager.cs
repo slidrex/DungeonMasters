@@ -20,9 +20,11 @@ public class PlayerManager : MonoBehaviour
     {
 
         PlayerController player = Instantiate(GameLogic.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<PlayerController>();
-        
-        player.IsLocal = id == NetworkManager.Singleton.Client.Id;
-        
+        if(id == NetworkManager.Singleton.Client.Id){
+        player.SetAsLocal();
+
+        }
+
         player.SetUsername(username);
 
 

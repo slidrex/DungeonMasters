@@ -7,8 +7,12 @@ public class PlayerController : MonoBehaviour
     private bool[] inputs = new bool[4];
     [SerializeField] private TextMeshProUGUI userName;
     public ushort Id { get; set; }
-    public bool IsLocal { get; set; }
-
+    public bool IsLocal { get; private set; }
+    private FollowingCamera _followCamera;
+    public void SetAsLocal(){
+        IsLocal = true;
+        _followCamera = FindFirstObjectByType<FollowingCamera>();
+    }
     private void Update()
     {
         if (Input.GetKey(KeyCode.W))
@@ -43,7 +47,12 @@ public class PlayerController : MonoBehaviour
             inputs[i] = false;
     }
     public void Move(Vector2 position){
-        transform.position = position;
+                    transform.position = position;
+
+        if(IsLocal){
+            _followCamera.SetPosition(position);
+        }
+       
     }
 
     #region Messages

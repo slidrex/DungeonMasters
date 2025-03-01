@@ -41,6 +41,7 @@ public class NetworkManager : MonoBehaviour
     [SerializeField] private TMP_InputField _usernameInput;
     [SerializeField] private GameObject _authScreen;
     [SerializeField] private GameObject _gameScreen;
+
     public Client Client;
 
 
@@ -71,7 +72,7 @@ public class NetworkManager : MonoBehaviour
     {
         string username = _usernameInput.text;
         if(username == "" || username.Length < 3){
-            Debug.LogError("Error: Invalid username. pick other one");
+            username = "Player" + UnityEngine.Random.Range(0, 10000);
         }
         Client.Connect($"{_ipInput.text}:{_port}"); 
         Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendName);
@@ -100,6 +101,10 @@ public class NetworkManager : MonoBehaviour
     {
 
     }
+    private void DidDisconnect(object sender, EventArgs e)
+    {
+
+    }
 
     private void FailedToConnect(object sender, EventArgs e)
     {
@@ -111,8 +116,5 @@ public class NetworkManager : MonoBehaviour
 
     }
 
-    private void DidDisconnect(object sender, EventArgs e)
-    {
-
-    }
+    
 }
