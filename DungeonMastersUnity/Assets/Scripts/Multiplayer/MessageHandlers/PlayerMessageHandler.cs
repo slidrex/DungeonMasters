@@ -26,6 +26,9 @@ namespace Multiplayer.MessageHandlers
                 }
             }
         }
+        public void HandleReady(bool isReady){
+            FindFirstObjectByType<Lobby>().SetButtonReadyStatus(isReady);
+        }
 
         private void Awake()
         {
@@ -69,6 +72,10 @@ namespace Multiplayer.MessageHandlers
             if (PlayerManager.list.TryGetValue(message.GetUShort(), out PlayerController player)){
                 player.Move(message.GetVector2());
             }
+        }
+        [MessageHandler((ushort)ServerToClientId.LOBBY_responseSetReady)]
+        private static void HandleReadyResponse(Message message){
+            Singleton.HandleReady(message.GetBool());
         }
     }
 }

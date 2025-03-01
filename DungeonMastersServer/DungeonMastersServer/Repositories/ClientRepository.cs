@@ -1,5 +1,5 @@
 ﻿using DungeonMastersServer.MessageHandlers;
-using DungeonMastersServer.Models;
+using DungeonMastersServer.Models.Player;
 using DungeonMastersServer.Services;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace DungeonMastersServer.Repositories
 {
     class ClientRepository : SingletonService<ClientRepository>
     {
-        private readonly Dictionary<ushort, Models.PlayerClient> _players = new();
-        public void AddPlayer(ushort id, Models.PlayerClient client)
+        private readonly Dictionary<ushort, PlayerClient> _players = new();
+        public void AddPlayer(ushort id, PlayerClient client)
         {
             _players.Add(id, client);
         }
@@ -20,7 +20,7 @@ namespace DungeonMastersServer.Repositories
         {
             return _players.ToArray();
         }
-        public Models.PlayerClient GetPlayer(ushort id)
+        public PlayerClient GetPlayer(ushort id)
         {
             return _players[id];
         }
@@ -28,7 +28,7 @@ namespace DungeonMastersServer.Repositories
         {
             _players.Remove(id);
         }
-        public void SetPlayer(ushort id, Models.PlayerClient player)
+        public void SetPlayer(ushort id, PlayerClient player)
         {
             _players[id] = player;
         }

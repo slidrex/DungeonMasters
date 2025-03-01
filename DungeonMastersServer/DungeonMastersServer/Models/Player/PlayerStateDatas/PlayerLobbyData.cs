@@ -12,7 +12,7 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         public bool IsReady { get; private set; }
         public void SetReadyStatus(bool isReady)
         {
-            IsReady = IsReady;
+            IsReady = isReady;
         }
     }
 }
