@@ -1,34 +1,25 @@
 ﻿using ServerCore;
 using Riptide.Utils;
-using DungeonMastersServer.MessageHandlers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+using DungeonMastersServer.Services;
 
 namespace DungeonMastersServer
 {
     class Program
     {
-        private static void RegisterMessageHandlers()
+        private static void RegisterServices()
         {
 
-            Register(new PlayerMessageHandler(), new ChatMessageHandler());
+            Register(new PlayerService(), new PlayerMovementService());
         }
 
         private static NetworkManager _networkManager = null;
         private static bool _isRunning = false;
         private static void Main()
         {
-
-
-
-
-
             RiptideLogger.Initialize(Console.WriteLine, false);
             _networkManager = new NetworkManager(7777, 3);
             _isRunning = true;
-            RegisterMessageHandlers();
-
-
+            RegisterServices();
 
 
             Thread mainThread = new Thread(new ThreadStart(MainThread));
@@ -37,7 +28,7 @@ namespace DungeonMastersServer
             _networkManager.Start();
 
         }
-        private static void Register(params IAbstractMessageHandler[] handlers)
+        private static void Register(params IInitable[] handlers)
         {
             foreach(var handler in handlers)
             {

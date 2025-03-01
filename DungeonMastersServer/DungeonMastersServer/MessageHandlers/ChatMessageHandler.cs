@@ -2,8 +2,9 @@
 
 namespace DungeonMastersServer.MessageHandlers;
 
-public class ChatMessageHandler : MessageHandler<ChatMessageHandler>
+public class ChatMessageHandler
 {
+    /*
     [MessageHandler((ushort)ClientToServerId.sendChatMessage)]
     private static void HandleChatMessagePackage(ushort fromClient, Message message)
     {
@@ -28,4 +29,5 @@ public class ChatMessageHandler : MessageHandler<ChatMessageHandler>
     {
         return PlayerMessageHandler.Players[playerId].Username;
     }
+    */
 }
