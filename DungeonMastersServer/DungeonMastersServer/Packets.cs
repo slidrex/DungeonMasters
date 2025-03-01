@@ -5,7 +5,7 @@
     sendChatMessage = 2,
 
     LOBBY_requestSetReady = 50,
-
+    
     GAME_REQUESTHIT = 100,
     GAME_REQUEST_USE_ABILITY = 101,
     GAME_REQUEST_BUY_ABILITY = 102
@@ -20,6 +20,7 @@ enum ServerToClientId
     playerChatMessage = 3,
 
     setAllPlayerPositions = 10,
+    playerTeleport = 11,
 
     LOBBY_responseSetReady = 50,
     LOBBY_GameStarted = 51,

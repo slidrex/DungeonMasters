@@ -1,8 +1,12 @@
-﻿using DungeonMastersServer.MessageHandlers;
+﻿using System.Numerics;
+using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Models;
+using DungeonMastersServer.Models.Player;
 using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
 using Riptide;
+using ServerCore.Utils;
+
 namespace DungeonMastersServer.Services
 {
     class ClientService : SingletonService<ClientService>
@@ -63,6 +67,50 @@ namespace DungeonMastersServer.Services
             var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerDisconnected);
             msg.AddUShort(senderId);
             NetworkManager.Server.SendToAll(msg);
+        }
+
+        public void TransportPlayer(ushort fromClient, Vector2 position)
+        {
+            var player = ClientRepository.Service.GetPlayer(fromClient);
+
+            player.Position = position;
+            
+            ClientRepository.Service.SetPlayer(fromClient, player);
+
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerTeleport);
+            msg.AddUShort(fromClient);
+            msg.AddVector2(player.Position);
+            NetworkManager.Server.SendToAll(msg);
+        }
+
+        public void TransportAllPlayers()
+        {
+            var players = ClientRepository.Service.GetPlayers();
+
+            Vector2[] positions = new Vector2[]
+            {
+                new Vector2(-10, 9),
+                new Vector2(10, 9),
+                new Vector2(-10, -8),
+                new Vector2(10, -8),
+            };
+            
+            foreach (var player in players)
+            {
+                TransportPlayer(player.Key, positions[player.Key - 1]);
+                _ = FreezePlayer(player.Key);
+            }
+        }
+
+        public async Task FreezePlayer(ushort fromClient)
+        {
+            var player = ClientRepository.Service.GetPlayer(fromClient);
+            
+            player.SetFreeze(true);
+
+            await Task.Delay(5000);
+            
+            player.SetFreeze(false);
         }
     }
 }

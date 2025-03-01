@@ -36,18 +36,24 @@ namespace DungeonMastersServer.Services
 
             if(readyPlayerCount == playerCount)
             {
-                if(readyPlayerCount < 3)
-                {
-                    StateManagerService.Service.SetState(GameState.InGame);
-                    
-                    //ChatMessageService.Service.SendSystemChatMessage("Can't start game. Need minimum 3 players");
-                }
-                else
-                {
-                    StateManagerService.Service.SetState(GameState.InGame);
-                }
+                StateManagerService.Service.SetState(GameState.InGame);
+                ClientService.Service.TransportAllPlayers();
             }
 
         }
     }
 }
+
+/*
+                if(readyPlayerCount < 3)
+                {
+                    StateManagerService.Service.SetState(GameState.InGame);
+                    
+                    ChatMessageService.Service.SendSystemChatMessage("Can't start game. Need minimum 3 players");
+                }
+                else
+                {
+                    StateManagerService.Service.SetState(GameState.InGame);
+                    ClientService.Service.TransportAllPlayers();
+                }
+*/

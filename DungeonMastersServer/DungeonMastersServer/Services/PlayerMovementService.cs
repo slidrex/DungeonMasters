@@ -22,26 +22,32 @@ namespace DungeonMastersServer.Services
 
 
 
-            if (w && position.Y < boundSize)
-            {
-                movement.Y += 1;
-            }
-            if (a && position.X > -boundSize)
-            {
-                movement.X -= 1;
-            }
-            if (s && position.Y > -boundSize)
-            {
-                movement.Y -= 1;
-            }
-            if (d && position.X < boundSize) {
-                movement.X += 1;
-            }
+            if (!player.Freezed) {
+                if (w && position.Y < boundSize)
+                {
+                    movement.Y += 1;
+                }
+
+                if (a && position.X > -boundSize)
+                {
+                    movement.X -= 1;
+                }
+
+                if (s && position.Y > -boundSize)
+                {
+                    movement.Y -= 1;
+                }
+
+                if (d && position.X < boundSize)
+                {
+                    movement.X += 1;
+                }
 
 
-            if (movement != Vector2.Zero)
-            {
-                movement = Vector2.Normalize(movement);
+                if (movement != Vector2.Zero)
+                {
+                    movement = Vector2.Normalize(movement);
+                }
             }
 
             
