@@ -10,7 +10,7 @@ namespace DungeonMastersServer
         private static void RegisterServices()
         {
 
-            Register(new ClientService(), new PlayerMovementService(), new ClientRepository(), new StateManagerService(), new ChatMessageService());
+            Register(new ClientService(), new PlayerMovementService(), new ClientRepository(), new StateManagerService(), new LobbyService(), new ChatMessageService());
         }
 
         private static NetworkManager _networkManager = null;
