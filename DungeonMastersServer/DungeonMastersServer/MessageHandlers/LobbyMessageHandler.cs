@@ -22,25 +22,7 @@ namespace DungeonMastersServer.MessageHandlers
         {
             bool isReady = message.GetBool();
 
-            var player = ClientRepository.Service.GetPlayer(fromClient);
-            var data = player.GetLobbyData();
-            var username = player.Username;
-            data.SetReadyStatus(isReady);
-            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.LOBBY_responseSetReady);
-            msg.AddBool(isReady);
-            NetworkManager.Server.Send(message, fromClient);
-
-            var chatMsg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerChatMessage);
-            chatMsg.AddString(username);
-
-
-            var players = ClientRepository.Service.GetPlayers();
-            var playerCount = players.Length;
-            var readyPlayerCount = players.Count((s) => s.Value.GetLobbyData().IsReady == true);
-
-            chatMsg.AddString((isReady ? $"{username} is ready" : $"{username} is not ready") + $"({readyPlayerCount}/{playerCount})");
-
-            NetworkManager.Server.SendToAll(chatMsg);
+            LobbyService.Service.HandleReady(fromClient, isReady);
         }
 
     }

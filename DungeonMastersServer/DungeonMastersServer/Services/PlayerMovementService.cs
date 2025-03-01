@@ -12,30 +12,29 @@ namespace DungeonMastersServer.Services
         public void MovePlayer(ushort fromClient, PlayerClient player, bool w, bool a, bool s, bool d)
         {
             Vector2 position = player.Position;
+
+            int boundSize = StateManagerService.Service.CurrentState == GameState.InLobby ? 5 : 12;
             
-            
-            
-            float deltaSpeed = 0.04f;
+            float deltaSpeed = 0.08f;
             
             
             Vector2 movement = Vector2.Zero;
 
 
 
-            if (w && position.Y < 5)
+            if (w && position.Y < boundSize)
             {
                 movement.Y += 1;
             }
-            if (a && position.X > -5)
+            if (a && position.X > -boundSize)
             {
                 movement.X -= 1;
             }
-            if (s && position.Y > -5)
+            if (s && position.Y > -boundSize)
             {
                 movement.Y -= 1;
             }
-            if (d && position.X < 5)
-            {
+            if (d && position.X < boundSize) {
                 movement.X += 1;
             }
 

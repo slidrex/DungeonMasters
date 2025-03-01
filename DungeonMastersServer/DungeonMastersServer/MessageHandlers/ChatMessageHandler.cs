@@ -11,7 +11,7 @@ public class ChatMessageHandler
     {
         var chatMessage = message.GetString();
         
-        ChatMessageService.Service.SendChatMessage(fromClient, chatMessage);
+        ChatMessageService.Service.SendChatMessage(chatMessage, fromClient);
     }
 
 }

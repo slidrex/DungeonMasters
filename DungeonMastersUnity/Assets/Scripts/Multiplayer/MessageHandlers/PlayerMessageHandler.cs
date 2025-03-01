@@ -49,6 +49,9 @@ namespace Multiplayer.MessageHandlers
         {
             chat.AddMessage(username, message);
         }
+        private void GameStarted(){
+            FindFirstObjectByType<StateManager>().SwitchToGame();
+        }
         
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
         public static void SendChatMessage(Message message)
@@ -76,6 +79,10 @@ namespace Multiplayer.MessageHandlers
         [MessageHandler((ushort)ServerToClientId.LOBBY_responseSetReady)]
         private static void HandleReadyResponse(Message message){
             Singleton.HandleReady(message.GetBool());
+        }
+        [MessageHandler((ushort)ServerToClientId.LOBBY_GameStarted)]
+        private static void GameStarted(Message message){
+            Singleton.GameStarted();
         }
     }
 }

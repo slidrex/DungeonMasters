@@ -1,4 +1,5 @@
 ﻿using DungeonMastersServer.MessageHandlers;
+using Riptide;
 
 enum GameState
 {
@@ -24,9 +25,11 @@ namespace DungeonMastersServer.Services
             if (CurrentState == GameState.InLobby && state == GameState.InGame)
             {
                 GameStarted?.Invoke();
+                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.LOBBY_GameStarted);
+                NetworkManager.Server.SendToAll(msg);
             }
             CurrentState = state;
-
         }
+        
     }
 }
