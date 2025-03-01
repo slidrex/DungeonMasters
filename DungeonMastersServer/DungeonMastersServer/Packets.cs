@@ -5,6 +5,7 @@
     sendChatMessage = 2,
 
     LOBBY_requestSetReady = 50,
+    LOBBY_loadLobbyScene = 51,
     
     GAME_REQUESTHIT = 100,
     GAME_REQUEST_USE_ABILITY = 101,

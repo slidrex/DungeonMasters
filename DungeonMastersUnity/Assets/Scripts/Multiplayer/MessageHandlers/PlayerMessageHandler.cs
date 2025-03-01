@@ -2,6 +2,7 @@
 using Riptide;
 using UI.Chat;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 namespace Multiplayer.MessageHandlers
@@ -9,7 +10,7 @@ namespace Multiplayer.MessageHandlers
     public class PlayerMessageHandler : MonoBehaviour
     {
         [SerializeField] private PlayerManager playerManager;
-        [SerializeField] private Chat chat;
+        private Chat chat;
         private static PlayerMessageHandler _singleton;
 
         public static PlayerMessageHandler Singleton
@@ -35,6 +36,11 @@ namespace Multiplayer.MessageHandlers
             _singleton = this;
         }
 
+        private void Start()
+        {
+            chat = FindFirstObjectByType<Chat>();
+        }
+
         private void Spawn(ushort id, string username, Vector3 position)
         {
             playerManager.Spawn(id, username, position);
@@ -47,10 +53,15 @@ namespace Multiplayer.MessageHandlers
 
         private void SendMsg(string username, string message)
         {
+            if (chat == null) chat = FindFirstObjectByType<Chat>();
+            
             chat.AddMessage(username, message);
         }
         private void GameStarted(){
-            FindFirstObjectByType<StateManager>().SwitchToGame();
+            SceneManager.LoadScene(2);
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_loadLobbyScene);
+            msg.AddString(NetworkManager.Singleton.UserName);
+            NetworkManager.Singleton.Client.Send(msg);
         }
         
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
@@ -83,6 +94,16 @@ namespace Multiplayer.MessageHandlers
         [MessageHandler((ushort)ServerToClientId.LOBBY_GameStarted)]
         private static void GameStarted(Message message){
             Singleton.GameStarted();
+        }
+
+        [MessageHandler((ushort)ServerToClientId.playerTeleport)]
+        private static void PlayerTeleport(Message message)
+        {
+            var fromClient = message.GetUShort();
+            var pos = message.GetVector2();
+            
+            var player = PlayerManager.list[fromClient];
+            player.Move(pos);
         }
     }
 }

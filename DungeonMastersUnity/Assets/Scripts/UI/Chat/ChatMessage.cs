@@ -2,24 +2,20 @@
 using UI.Message;
 using UnityEngine;
 using Extensions;
+using UnityEngine.Serialization;
 
 namespace UI.Chat
 {
     public class ChatMessage : MonoBehaviour
     {
-        private TextMeshProUGUI _textMesh;
-
-        private void Awake()
-        {
-            _textMesh = GetComponent<TextMeshProUGUI>();
-        }
-
+        [SerializeField] private TextMeshProUGUI textMesh;
+        
         public void SetMessage(string message, MessageStyle style = null, string userName = "")
         {
             style = style ?? MessageStyles.DefaultStyle;
             
-            _textMesh.text = $"{userName} :{message}";
-            _textMesh.ApplyStyle(style);
+            textMesh.text = $"{userName} :{message}";
+            textMesh.ApplyStyle(style);
         }
     }
 }

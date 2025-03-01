@@ -26,30 +26,34 @@ namespace DungeonMastersServer.Services
             {
                 NetworkManager.Server.DisconnectClient(fromClient);
             }
-            
 
+            var player = new Models.Player.PlayerClient(username, new PlayerLobbyData());
+            ClientRepository.Service.AddPlayer(fromClient, player);
+        }
 
+        internal void SpawnNewPlayer(ushort fromClient, string username)
+        {
             var existingPlayers = ClientRepository.Service.GetPlayers();
             if (existingPlayers != null && existingPlayers.Length > 0)
             {
                 SpawnExistingPlayers(fromClient);
             }
-            var player = new Models.Player.PlayerClient(username, new PlayerLobbyData());
-            ClientRepository.Service.AddPlayer(fromClient, player);
-
+            
             Console.WriteLine(username + " connected the game!");
             var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerConnected);
             msg.AddUShort(fromClient);
             msg.AddString(username);
             NetworkManager.Server.SendToAll(msg);
-            
         }
+        
         private void SpawnExistingPlayers(ushort fromClient)
         {
             var playersArray = ClientRepository.Service.GetPlayers();
 
             foreach (var player in playersArray)
             {
+                if(fromClient == player.Key) continue;
+                
                 var existingPlayer = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerConnected);
                 existingPlayer.AddUShort(player.Key);
                 Console.WriteLine(player.Value.Username);
@@ -86,7 +90,7 @@ namespace DungeonMastersServer.Services
         public void TransportAllPlayers()
         {
             var players = ClientRepository.Service.GetPlayers();
-
+            
             Vector2[] positions = new Vector2[]
             {
                 new Vector2(-10, 9),
@@ -97,8 +101,8 @@ namespace DungeonMastersServer.Services
             
             foreach (var player in players)
             {
-                TransportPlayer(player.Key, positions[player.Key - 1]);
                 _ = FreezePlayer(player.Key);
+                TransportPlayer(player.Key, positions[player.Key - 1]);
             }
         }
 

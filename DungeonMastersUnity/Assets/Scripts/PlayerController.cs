@@ -8,11 +8,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI userName;
     public ushort Id { get; set; }
     public bool IsLocal { get; private set; }
-    private FollowingCamera _followCamera;
-    public void SetAsLocal(){
+
+    public void SetAsLocal()
+    {
         IsLocal = true;
-        _followCamera = FindFirstObjectByType<FollowingCamera>();
     }
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.W))
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     {
         userName.text = username;
     }
+
     private void OnDestroy()
     {
         PlayerManager.list.Remove(Id);
@@ -39,28 +41,28 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(inputs[0] || inputs[1] || inputs[2] || inputs[3] == true){
+        if (inputs[0] || inputs[1] || inputs[2] || inputs[3] == true)
+        {
             SendInput();
         }
 
         for (int i = 0; i < inputs.Length; i++)
             inputs[i] = false;
     }
-    public void Move(Vector2 position){
-                    transform.position = position;
 
-        if(IsLocal){
-            _followCamera.SetPosition(position);
-        }
-       
+    public void Move(Vector2 position)
+    {
+        transform.position = position;
     }
 
     #region Messages
+
     private void SendInput()
     {
         Message message = Message.Create(MessageSendMode.Unreliable, (ushort)ClientToServerId.sendMoveInputs);
         message.AddBools(inputs, false);
         NetworkManager.Singleton.Client.Send(message);
     }
+
     #endregion
 }

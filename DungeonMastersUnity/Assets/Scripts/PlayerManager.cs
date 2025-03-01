@@ -18,7 +18,6 @@ public class PlayerManager : MonoBehaviour
     }
     public void Spawn(ushort id, string username, Vector3 position)
     {
-
         PlayerController player = Instantiate(GameLogic.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<PlayerController>();
         if(id == NetworkManager.Singleton.Client.Id){
         player.SetAsLocal();

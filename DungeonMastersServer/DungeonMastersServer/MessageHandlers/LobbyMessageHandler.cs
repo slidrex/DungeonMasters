@@ -1,11 +1,5 @@
-﻿using DungeonMastersServer.Repositories;
-using DungeonMastersServer.Services;
+﻿using DungeonMastersServer.Services;
 using Riptide;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DungeonMastersServer.MessageHandlers
 {
@@ -25,5 +19,10 @@ namespace DungeonMastersServer.MessageHandlers
             LobbyService.Service.HandleReady(fromClient, isReady);
         }
 
+        [MessageHandler((ushort)ClientToServerId.LOBBY_loadLobbyScene)]
+        private static void HandleLoadLobbyScene(ushort fromClient, Message message)
+        {
+            ClientService.Service.SpawnNewPlayer(fromClient, message.GetString());
+        }
     }
 }
