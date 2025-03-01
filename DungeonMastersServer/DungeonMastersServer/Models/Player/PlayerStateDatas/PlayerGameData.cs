@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DungeonMastersServer.Models.Player.PlayerDatas
+{
+    class PlayerGameData : PlayerStateData
+    {
+        public float DefaultSpeed = 0.04f;
+    }
+}
