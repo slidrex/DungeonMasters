@@ -19,10 +19,16 @@ namespace DungeonMastersServer.MessageHandlers
             LobbyService.Service.HandleReady(fromClient, isReady);
         }
 
-        [MessageHandler((ushort)ClientToServerId.LOBBY_loadLobbyScene)]
+        [MessageHandler((ushort)ClientToServerId.LOBBY_LOAD_PLAYERS)]
         private static void HandleLoadLobbyScene(ushort fromClient, Message message)
         {
             ClientService.Service.SpawnNewPlayer(fromClient, message.GetString());
+        }
+
+        [MessageHandler((ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME)]
+        private static void HendleSwitchGame(ushort fromClient, Message message)
+        {
+            ClientService.Service.TransportAllPlayers();
         }
     }
 }

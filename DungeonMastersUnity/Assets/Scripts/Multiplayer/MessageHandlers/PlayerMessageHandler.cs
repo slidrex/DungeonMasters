@@ -59,9 +59,11 @@ namespace Multiplayer.MessageHandlers
         }
         private void GameStarted(){
             SceneManager.LoadScene(2);
-            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_loadLobbyScene);
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
+            var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME);
             msg.AddString(NetworkManager.Singleton.UserName);
             NetworkManager.Singleton.Client.Send(msg);
+            NetworkManager.Singleton.Client.Send(msg2);
         }
         
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]

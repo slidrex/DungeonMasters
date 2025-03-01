@@ -37,7 +37,6 @@ namespace DungeonMastersServer.Services
             if(readyPlayerCount == playerCount)
             {
                 StateManagerService.Service.SetState(GameState.InGame);
-                ClientService.Service.TransportAllPlayers();
             }
 
         }

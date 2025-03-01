@@ -13,7 +13,8 @@ enum ClientToServerId
     sendChatMessage = 2,
 
     LOBBY_requestSetReady = 50,
-    LOBBY_loadLobbyScene = 51,
+    LOBBY_LOAD_PLAYERS = 51,
+    LOBBY_SWITCH_TO_GAME = 52,
     
     GAME_REQUESTHIT = 100,
     GAME_REQUEST_USE_ABILITY = 101,
@@ -40,7 +41,6 @@ enum ServerToClientId
     GAME_RESPONSE_BUY_ABILITY = 103,
     GAME_HURT_PLAYER = 104,
 }
-
 
 public class NetworkManager : MonoBehaviour
 {
@@ -110,7 +110,7 @@ public class NetworkManager : MonoBehaviour
     private void DidConnect(object sender, EventArgs e)
     {
         SceneManager.LoadScene(1);
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_loadLobbyScene);
+        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
         msg.AddString(UserName);
         NetworkManager.Singleton.Client.Send(msg);
     }
