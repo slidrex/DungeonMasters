@@ -12,8 +12,10 @@ namespace UI.Chat
         {
             if (string.IsNullOrWhiteSpace(text)) return;
             
-            chat.AddMessage(text);
+            chat.AddMessage("", text);
             inputField.text = string.Empty;
+            
+            NetworkManager.SendMsg(text);
         }
 
         private void OnEnable()

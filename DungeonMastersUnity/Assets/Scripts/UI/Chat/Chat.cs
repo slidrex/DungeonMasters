@@ -13,11 +13,12 @@ namespace UI.Chat
         [SerializeField] private GameObject chatPanel;
         [SerializeField] private ScrollRect scrollRect;
 
-        public void AddMessage(string message)
+        public void AddMessage(string username, string message)
         {
             ChatMessage chatMessage = Instantiate(messagePrefab, content);
-            chatMessage.SetMessage(message);
+            chatMessage.SetMessage(message, null, username);
             scrollRect.verticalNormalizedPosition = 0;
+            Debug.Log($"{username}: {message}");
         }
 
         private void Update()

@@ -15,6 +15,8 @@ public class ChatMessageHandler : MessageHandler<ChatMessageHandler>
         var username = GetUsername(fromClient);
         var chatMessage = message.GetString();
         
+        Console.WriteLine($"{username}: {chatMessage}");
+        
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerChatMessage);
         msg.AddString(username);
         msg.AddString(chatMessage);

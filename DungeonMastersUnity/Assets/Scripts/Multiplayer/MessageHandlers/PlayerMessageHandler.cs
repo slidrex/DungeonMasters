@@ -42,15 +42,15 @@ namespace Multiplayer.MessageHandlers
             playerManager.Despawn(id);
         }
 
-        private void SendMsg(string message)
+        private void SendMsg(string username, string message)
         {
-            chat.AddMessage(message);
+            chat.AddMessage(username, message);
         }
         
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
-        public static void SendChatMessage(string message)
+        public static void SendChatMessage(Message message)
         {
-            _singleton.SendMsg(message);
+            _singleton.SendMsg(message.GetString(), message.GetString());
         }
         
         [MessageHandler((ushort)ServerToClientId.playerConnected)]

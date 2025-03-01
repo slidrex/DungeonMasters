@@ -81,8 +81,8 @@ public class NetworkManager : MonoBehaviour
         _gameScreen.SetActive(true);
     }
     
-    private void SendMsg(string chatMessage) {
-        Message message = message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendChatMessage);
+    public static void SendMsg(string chatMessage) {
+        Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendChatMessage);
         message.AddString(chatMessage);
         NetworkManager.Singleton.Client.Send(message);
     }
