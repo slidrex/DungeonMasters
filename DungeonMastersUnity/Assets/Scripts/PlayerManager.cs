@@ -32,7 +32,6 @@ public class PlayerManager : MonoBehaviour
         player.Id = id;
 
         list.Add(id, player);
-
-        
     }
+    
 }

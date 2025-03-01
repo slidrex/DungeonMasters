@@ -1,6 +1,7 @@
 ﻿using ServerCore;
 using Riptide.Utils;
 using DungeonMastersServer.Services;
+using DungeonMastersServer.Repositories;
 
 namespace DungeonMastersServer
 {
@@ -9,7 +10,7 @@ namespace DungeonMastersServer
         private static void RegisterServices()
         {
 
-            Register(new ClientService(), new PlayerMovementService());
+            Register(new ClientService(), new PlayerMovementService(), new ClientRepository());
         }
 
         private static NetworkManager _networkManager = null;
@@ -42,6 +43,7 @@ namespace DungeonMastersServer
 
             while (_isRunning)
             {
+                
                 _networkManager.FixedUpdate();
             }
             _networkManager.Stop();
