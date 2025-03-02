@@ -13,6 +13,9 @@ namespace DungeonMastersServer.MessageHandlers;
         [MessageHandler((ushort)ClientToServerId.GAME_REQUESTHIT)]
         public static void HandleHitRequestPackage(ushort fromClient, Message message)
         {
+            if (StateManagerService.Service.CurrentState != GameState.InGame)
+                return;
+            
             var hitTarget = message.GetUShort();
             var damage = message.GetInt();
             
