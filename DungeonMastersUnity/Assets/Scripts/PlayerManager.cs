@@ -17,6 +17,15 @@ public class PlayerManager : MonoBehaviour
         list.Remove(id);
         Destroy(player.gameObject);
     }
+
+    public void DespawnAllPlayers()
+    {
+        foreach (var (key, value) in list)
+        {
+            Destroy(value.gameObject);
+        }
+        list.Clear();
+    }
     public void Spawn(ushort id, string username, Vector3 position)
     {
         PlayerController player = Instantiate(GameLogic.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<PlayerController>();
@@ -31,5 +40,9 @@ public class PlayerManager : MonoBehaviour
         player.Id = id;
 
         list.TryAdd(id, player);
+        foreach (var pl in list)
+        {
+            Debug.Log($"SPAWN {pl} ");
+        }
     }
 }
