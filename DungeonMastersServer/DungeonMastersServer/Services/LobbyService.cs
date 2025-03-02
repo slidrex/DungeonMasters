@@ -37,6 +37,8 @@ namespace DungeonMastersServer.Services
             if(readyPlayerCount == playerCount)
             {
                 StateManagerService.Service.SetState(GameState.InGame);
+                _ = GameService.Service.GameLoop();
+                Console.WriteLine("Started game rounds loop");
             }
 
         }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonMastersServer.Models.Player.PlayerDatas;
 
 namespace DungeonMastersServer.Repositories
 {
@@ -15,6 +16,7 @@ namespace DungeonMastersServer.Repositories
         public void AddPlayer(ushort id, PlayerClient client)
         {
             _players.Add(id, client);
+            var players = _players.ToArray();
         }
         public KeyValuePair<ushort, PlayerClient>[] GetPlayers()
         {
@@ -25,7 +27,11 @@ namespace DungeonMastersServer.Repositories
         {
             var player = GetPlayer(id);
             var playerData = player.GetGameData();
-            playerData.Health -= damage;
+            var playerBuffs = playerData.GetBuffs();
+            if (playerBuffs.Contains(PlayerBuffState.StrengthLevel1))
+                playerData.Health -= (damage + 5);
+            else
+                playerData.Health -= damage;
             SetPlayer(id, player);
         }
 

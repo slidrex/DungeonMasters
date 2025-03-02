@@ -20,7 +20,10 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
 
     enum PlayerBuffState
     {
-        
+        StrengthLevel1 = 0,
+        MoreHealth = 1,
+        MoreGold = 2,
+        MoreGoldInRoundStartLevel1 = 3
     }
     class PlayerGameData : PlayerStateData
     {
@@ -31,16 +34,49 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         
         public PlayerLifeState LifeState { get; private set; }
 
+        public int Gold { get; private set; }
+
+        private List<PlayerBuffState> _buffs = new List<PlayerBuffState>();
+        
         public override void EnterState()
         {
             MaxHealth = 100;
             Health = MaxHealth;
             LifeState = PlayerLifeState.Alive;
+            Gold = 5;
         }
 
+        public List<PlayerBuffState> GetBuffs()
+        {
+            return _buffs;
+        }
+
+        public void AddBuff(PlayerBuffState buff)
+        {
+            _buffs.Add(buff);
+        }
+        public void AddGold(int amount)
+        {
+
+            if (_buffs.Contains(PlayerBuffState.MoreGold))
+                Gold += amount + 5;
+            else
+                Gold += amount;
+        }
+
+        public void RemoveGold(int amount)
+        {
+            Gold -= amount;
+        }
+        
         public void KillPlayer()
         {
             LifeState = PlayerLifeState.Dead;
+        }
+
+        public void HealPlayer(int amount)
+        {
+            Health += amount;
         }
     }
 }

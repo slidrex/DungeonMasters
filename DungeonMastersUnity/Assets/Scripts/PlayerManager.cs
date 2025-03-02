@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
             LocalPlayer = player;
         }
         player.SetUsername(username);
-        FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
+        //FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
 
         player.name = $"Player {id} (username)";
         player.Id = id;
