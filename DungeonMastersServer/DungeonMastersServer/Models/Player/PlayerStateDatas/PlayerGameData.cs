@@ -15,8 +15,8 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
 
         public override void EnterState()
         {
-            Health = 100;
             MaxHealth = 100;
+            Health = MaxHealth;
         }
     }
 }
