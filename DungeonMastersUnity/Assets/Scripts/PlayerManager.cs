@@ -9,6 +9,7 @@ using TMPro;
 public class PlayerManager : MonoBehaviour
 {
     public static Dictionary<ushort, PlayerController> list = new();
+    public PlayerController LocalPlayer { get; private set; }
     
     public void Despawn(ushort id)
     {
@@ -20,17 +21,15 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerController player = Instantiate(GameLogic.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<PlayerController>();
         if(id == NetworkManager.Singleton.Client.Id){
-        player.SetAsLocal();
-
+            player.SetAsLocal();
+            LocalPlayer = player;
         }
-
         player.SetUsername(username);
-
+        FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
 
         player.name = $"Player {id} (username)";
         player.Id = id;
 
         list.Add(id, player);
     }
-    
 }

@@ -66,13 +66,28 @@ namespace DungeonMastersServer.Services
         {
             var senderId = e.Client.Id;
             Console.WriteLine(ClientRepository.Service.GetPlayer(senderId).Username + " left the game!");
+            
             ClientRepository.Service.RemovePlayer(senderId);
 
             var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerDisconnected);
             msg.AddUShort(senderId);
+            
+            var players = ClientRepository.Service.GetPlayers();
+
+            if (players.Length == 0)
+                RestoreServer();
+            
             NetworkManager.Server.SendToAll(msg);
         }
 
+        private void RestoreServer()
+        {
+            if (StateManagerService.Service.CurrentState != GameState.InLobby)
+            {
+                ClientRepository.Service.ClearPlayers();
+                StateManagerService.Service.SetState(GameState.InLobby);
+            }
+        }
         public void TransportPlayer(ushort fromClient, Vector2 position)
         {
             var player = ClientRepository.Service.GetPlayer(fromClient);
@@ -99,11 +114,12 @@ namespace DungeonMastersServer.Services
                 new Vector2(10, -8),
             };
             
-            foreach (var player in players)
+            foreach (var (player, index) in players.Select((p, i) => (p, i)))
             {
                 _ = FreezePlayer(player.Key);
-                TransportPlayer(player.Key, positions[player.Key - 1]);
+                TransportPlayer(player.Key, positions[index]);
             }
+
         }
 
         public async Task FreezePlayer(ushort fromClient)

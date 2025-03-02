@@ -1,4 +1,6 @@
 ﻿using DungeonMastersServer.MessageHandlers;
+using DungeonMastersServer.Models.Player.PlayerDatas;
+using DungeonMastersServer.Repositories;
 using Riptide;
 
 enum GameState
@@ -27,6 +29,13 @@ namespace DungeonMastersServer.Services
                 GameStarted?.Invoke();
                 var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.LOBBY_GameStarted);
                 NetworkManager.Server.SendToAll(msg);
+
+                var players = ClientRepository.Service.GetPlayers();
+
+                foreach (var player in players)
+                {
+                    player.Value.SetPlayerStateData(new PlayerGameData());
+                }
             }
             CurrentState = state;
         }

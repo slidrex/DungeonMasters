@@ -1,6 +1,8 @@
 ﻿using System;
 using Riptide;
+using UI;
 using UI.Chat;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -12,6 +14,7 @@ namespace Multiplayer.MessageHandlers
         [SerializeField] private PlayerManager playerManager;
         private Chat chat;
         private static PlayerMessageHandler _singleton;
+        private HealthBar _healthBar;
 
         public static PlayerMessageHandler Singleton
         {
@@ -39,6 +42,7 @@ namespace Multiplayer.MessageHandlers
         private void Start()
         {
             chat = FindFirstObjectByType<Chat>();
+            _healthBar = FindFirstObjectByType<HealthBar>();
         }
 
         private void Spawn(ushort id, string username, Vector3 position)
@@ -106,6 +110,15 @@ namespace Multiplayer.MessageHandlers
             
             var player = PlayerManager.list[fromClient];
             player.Move(pos);
+        }
+
+        [MessageHandler((ushort)ServerToClientId.GAME_HURT_PLAYER)]
+        private static void GameHurtPlayer(Message message)
+        {
+            var currentHealth = message.GetInt();
+            var maxHealth = message.GetInt();
+            
+            Singleton._healthBar.SetHealth(currentHealth, maxHealth);
         }
     }
 }

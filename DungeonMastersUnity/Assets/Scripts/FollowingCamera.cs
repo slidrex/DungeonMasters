@@ -1,10 +1,19 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class FollowingCamera : MonoBehaviour
 {
-    public void SetPosition(Vector2 position)
+    private CinemachineCamera _camera;
+    private Transform _target;
+
+    private void Start()
     {
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
+        _camera = GetComponent<CinemachineCamera>();
     }
-    
+
+    public void SetTarget(Transform target)
+    {
+        _target = target;
+        _camera.Follow = _target;
+    }
 }

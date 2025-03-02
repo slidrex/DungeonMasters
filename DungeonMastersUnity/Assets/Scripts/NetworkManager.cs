@@ -1,46 +1,9 @@
-using UnityEngine;
+using System;
 using Riptide;
 using Riptide.Utils;
-using System;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-
-enum ClientToServerId
-{
-    sendName = 0,
-    sendMoveInputs = 1,
-    sendChatMessage = 2,
-
-    LOBBY_requestSetReady = 50,
-    LOBBY_LOAD_PLAYERS = 51,
-    LOBBY_SWITCH_TO_GAME = 52,
-    
-    GAME_REQUESTHIT = 100,
-    GAME_REQUEST_USE_ABILITY = 101,
-    GAME_REQUEST_BUY_ABILITY = 102
-}
-
-
-enum ServerToClientId
-{
-    playerConnected = 0,
-    playerDisconnected = 1,
-    playerMovement = 2,
-    playerChatMessage = 3,
-
-    setAllPlayerPositions = 10,
-    playerTeleport = 11,
-
-    LOBBY_responseSetReady = 50,
-    LOBBY_GameStarted = 51,
-
-    GAME_NEWROUND = 100,
-    GAME_RESPONSE_HIT = 101,
-    GAME_RESPONSE_USE_ABILITY = 102,
-    GAME_RESPONSE_BUY_ABILITY = 103,
-    GAME_HURT_PLAYER = 104,
-}
+using Random = UnityEngine.Random;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -83,19 +46,19 @@ public class NetworkManager : MonoBehaviour
     public void ConnectToServer(string username, string ip)
     {
         if(username == "" || username.Length < 3){
-            username = "Player" + UnityEngine.Random.Range(0, 10000);
+            username = "Player" + Random.Range(0, 10000);
         }
         Client.Connect($"{ip}:{_port}"); 
         Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendName);
         message.AddString(username);
-        NetworkManager.Singleton.Client.Send(message);
+        Singleton.Client.Send(message);
         UserName = username;
     }
     
     public static void SendMsg(string chatMessage) {
         Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.sendChatMessage);
         message.AddString(chatMessage);
-        NetworkManager.Singleton.Client.Send(message);
+        Singleton.Client.Send(message);
     }
 
     // Update is called once per frame
@@ -112,7 +75,7 @@ public class NetworkManager : MonoBehaviour
         SceneManager.LoadScene(1);
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
         msg.AddString(UserName);
-        NetworkManager.Singleton.Client.Send(msg);
+        Singleton.Client.Send(msg);
     }
     private void DidDisconnect(object sender, EventArgs e)
     {
