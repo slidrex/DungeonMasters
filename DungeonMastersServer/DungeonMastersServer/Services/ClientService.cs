@@ -83,10 +83,10 @@ namespace DungeonMastersServer.Services
         private void RestoreServer()
         {
             if (StateManagerService.Service.CurrentState != GameState.InLobby)
-            {
-                ClientRepository.Service.ClearPlayers();
                 StateManagerService.Service.SetState(GameState.InLobby);
-            }
+            
+            ClientRepository.Service.ClearPlayers();
+            Console.WriteLine("Server is empty, reloaded server");
         }
         public void TransportPlayer(ushort fromClient, Vector2 position)
         {

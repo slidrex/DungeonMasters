@@ -1,4 +1,5 @@
 ﻿using DungeonMastersServer.MessageHandlers;
+using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
 using Riptide;
 
@@ -18,11 +19,23 @@ public class GameService : SingletonService<GameService>
         var targetHealth = targetPlayerGameData.Health;
         
         var targetMaxHealth = targetPlayerGameData.MaxHealth;
+
+        if (targetPlayerGameData.Health <= 0)
+            KillPlayer(targetPlayerGameData);
         
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
         msg.AddInt(targetHealth);
         msg.AddInt(targetMaxHealth);
         
         NetworkManager.Server.Send(msg, target);
+    }
+
+    private void KillPlayer(PlayerGameData playerGameData)
+    {
+        playerGameData.KillPlayer();
+
+        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_PLAYER_DEAD);
+
+        NetworkManager.Server.SendToAll(msg);
     }
 }
