@@ -17,7 +17,7 @@ namespace DungeonMastersServer.MessageHandlers;
                 return;
             
             var hitTarget = message.GetUShort();
-            var damage = message.GetInt();
+            var damage = 10;
             
             GameService.Service.HitRequest(hitTarget, fromClient, damage);
         }
