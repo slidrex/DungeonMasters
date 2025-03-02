@@ -20,6 +20,14 @@ namespace DungeonMastersServer.Repositories
         {
             return _players.ToArray();
         }
+
+        public void DamagePlayer(ushort id, int damage)
+        {
+            var player = GetPlayer(id);
+            var playerData = player.GetGameData();
+            playerData.Health -= damage;
+            SetPlayer(id, player);
+        }
         public PlayerClient GetPlayer(ushort id)
         {
             return _players[id];
@@ -31,6 +39,11 @@ namespace DungeonMastersServer.Repositories
         public void SetPlayer(ushort id, PlayerClient player)
         {
             _players[id] = player;
+        }
+
+        public void ClearPlayers()
+        {
+            _players.Clear();
         }
     }
 }

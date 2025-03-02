@@ -15,6 +15,7 @@ namespace DungeonMastersServer.Models.Player
 
         public bool Freezed { get; private set; }
         public Vector2 Position { get; set; }
+        
         private PlayerStateData _stateData { get; set; }
         public PlayerClient(string username, PlayerStateData stateData)
         {
@@ -22,6 +23,12 @@ namespace DungeonMastersServer.Models.Player
             Username = username;
             _stateData.AttachPlayer(this);
             Freezed = false;
+        }
+
+
+        public void SetPlayerStateData(PlayerStateData stateData)
+        {
+            _stateData = stateData;
         }
 
         public void SetFreeze(bool freeze)

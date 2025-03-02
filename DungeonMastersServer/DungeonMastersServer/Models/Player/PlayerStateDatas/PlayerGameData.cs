@@ -9,5 +9,11 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
     class PlayerGameData : PlayerStateData
     {
         public float DefaultSpeed = 0.04f;
+        public int Health { get; set; }
+
+        public override void EnterState()
+        {
+            Health = 100;
+        }
     }
 }

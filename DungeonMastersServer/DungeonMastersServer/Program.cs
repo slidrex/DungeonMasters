@@ -9,8 +9,8 @@ namespace DungeonMastersServer
     {
         private static void RegisterServices()
         {
-
-            Register(new ClientService(), new PlayerMovementService(), new ClientRepository(), new StateManagerService(), new LobbyService(), new ChatMessageService());
+            Register(new ClientService(), new PlayerMovementService(), new ClientRepository(), new StateManagerService(), new LobbyService(), new ChatMessageService(),
+                new GameService());
         }
 
         private static NetworkManager _networkManager = null;
@@ -25,7 +25,7 @@ namespace DungeonMastersServer
 
             Thread mainThread = new Thread(new ThreadStart(MainThread));
             mainThread.Start();
-
+            
             _networkManager.Start();
 
         }
