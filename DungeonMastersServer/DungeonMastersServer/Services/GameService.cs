@@ -14,10 +14,15 @@ public class GameService : SingletonService<GameService>
         ClientRepository.Service.DamagePlayer(target, damage);
         ChatMessageService.Service.SendSystemChatMessage($"{attackerPlayer.Username} hit {targetPlayer.Username}!");
 
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
-        msg.AddString(attackerPlayer.Username);
-        msg.AddString(targetPlayer.Username);
+        var targetPlayerGameData = targetPlayer.GetGameData();
+        var targetHealth = targetPlayerGameData.Health;
         
-        NetworkManager.Server.SendToAll(msg);
+        var targetMaxHealth = targetPlayerGameData.MaxHealth;
+        
+        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
+        msg.AddInt(targetHealth);
+        msg.AddInt(targetMaxHealth);
+        
+        NetworkManager.Server.Send(msg, target);
     }
 }

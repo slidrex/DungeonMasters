@@ -28,6 +28,13 @@ namespace DungeonMastersServer.Repositories
             playerData.Health -= damage;
             SetPlayer(id, player);
         }
+
+        public int GetPlayerMaxHealth(ushort id)
+        {
+            var player = GetPlayer(id);
+            var playerData = player.GetGameData();
+            return playerData.MaxHealth;
+        }
         public PlayerClient GetPlayer(ushort id)
         {
             return _players[id];

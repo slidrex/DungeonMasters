@@ -10,10 +10,13 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
     {
         public float DefaultSpeed = 0.04f;
         public int Health { get; set; }
+        
+        public int MaxHealth { get; set; } 
 
         public override void EnterState()
         {
             Health = 100;
+            MaxHealth = 100;
         }
     }
 }
