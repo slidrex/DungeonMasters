@@ -1,19 +1,15 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class FollowingCamera : MonoBehaviour
 {
-    private CinemachineCamera _camera;
+    [SerializeField] private CinemachineCamera cam;
     private Transform _target;
-
-    private void Start()
-    {
-        _camera = GetComponent<CinemachineCamera>();
-    }
 
     public void SetTarget(Transform target)
     {
         _target = target;
-        _camera.Follow = _target;
+        cam.Follow = _target;
     }
 }

@@ -30,6 +30,6 @@ public class PlayerManager : MonoBehaviour
         player.name = $"Player {id} (username)";
         player.Id = id;
 
-        list.Add(id, player);
+        list.TryAdd(id, player);
     }
 }
