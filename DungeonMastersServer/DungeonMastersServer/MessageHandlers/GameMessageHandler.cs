@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonMastersServer.Repositories;
 using DungeonMastersServer.Services;
 using Riptide;
 
@@ -20,6 +21,12 @@ namespace DungeonMastersServer.MessageHandlers;
             var damage = 10;
             
             GameService.Service.HitRequest(hitTarget, fromClient, damage);
+        }
+
+        [MessageHandler((ushort)ClientToServerId.GAME_REQUEST_END_TURN)]
+        public static void HandleEndTurnRequestPackage(ushort fromClient, Message message)
+        {
+            GameService.Service.PlayerPressedReady(fromClient);
         }
     }
 

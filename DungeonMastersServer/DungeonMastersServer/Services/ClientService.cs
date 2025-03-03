@@ -115,7 +115,7 @@ namespace DungeonMastersServer.Services
             NetworkManager.Server.SendToAll(msg);
         }
 
-        public void TransportAllPlayers()
+        public void TransportAllPlayers(int freezeDuration)
         {
             var players = ClientRepository.Service.GetPlayers();
             
@@ -130,20 +130,20 @@ namespace DungeonMastersServer.Services
             var i = 0;
             foreach (var (index, player) in players)
             {
-                _ = FreezePlayer(index);
+                _ = FreezePlayer(index, freezeDuration);
                 TransportPlayer(index, positions[i]);
                 i++;
             }
 
         }
 
-        public async Task FreezePlayer(ushort fromClient)
+        public async Task FreezePlayer(ushort fromClient, int freezeDuration)
         {
             var player = ClientRepository.Service.GetPlayer(fromClient);
             
             player.SetFreeze(true);
 
-            await Task.Delay(5000);
+            await Task.Delay(freezeDuration);
             
             player.SetFreeze(false);
         }
