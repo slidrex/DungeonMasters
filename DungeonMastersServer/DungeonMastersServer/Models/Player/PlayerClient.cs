@@ -19,16 +19,18 @@ namespace DungeonMastersServer.Models.Player
         private PlayerStateData _stateData { get; set; }
         public PlayerClient(string username, PlayerStateData stateData)
         {
-            _stateData = stateData;
+            SetPlayerStateData(stateData);
             Username = username;
-            _stateData.AttachPlayer(this);
             Freezed = false;
         }
 
 
         public void SetPlayerStateData(PlayerStateData stateData)
         {
+            _stateData?.ExitState();
+            stateData.AttachPlayer(this);
             _stateData = stateData;
+            stateData.EnterState();
         }
 
         public void SetFreeze(bool freeze)

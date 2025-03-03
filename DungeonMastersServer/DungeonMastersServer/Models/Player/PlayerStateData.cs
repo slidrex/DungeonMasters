@@ -8,7 +8,7 @@ namespace DungeonMastersServer.Models.Player
 {
     public abstract class PlayerStateData
     {
-        protected PlayerClient Player;
+        internal PlayerClient Player;
         
         internal void AttachPlayer(PlayerClient player)
         {

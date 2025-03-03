@@ -26,21 +26,35 @@ namespace DungeonMastersServer.Services
             {
                 NetworkManager.Server.DisconnectClient(fromClient);
             }
-
+            Console.WriteLine(username + " connected the game!");
             var player = new Models.Player.PlayerClient(username, new PlayerLobbyData());
             ClientRepository.Service.AddPlayer(fromClient, player);
         }
-
-        internal void SpawnNewPlayer(ushort fromClient, string username)
+        internal bool CheckAllPlayersLoadGame()
+        {
+            var players = ClientRepository.Service.GetPlayers();
+            bool isAllPlayersLoad = true;
+            for(int i = 0; i < players.Length; i++)
+            {
+                var playerLobbyData = players[i].Value.GetLobbyData();
+                if (!playerLobbyData.IsLoadedToGameScene)
+                {
+                    isAllPlayersLoad = false;
+                    break;
+                }
+             }
+            return isAllPlayersLoad;
+        }
+        internal void SpawnNewPlayer(ushort fromClient, string username, bool includeExisting = true)
         {
             var existingPlayers = ClientRepository.Service.GetPlayers();
-            if (existingPlayers != null && existingPlayers.Length > 0)
+            if (existingPlayers != null && existingPlayers.Length > 0 && includeExisting)
             {
                 SpawnExistingPlayers(fromClient);
             }
             
-            Console.WriteLine(username + " connected the game!");
-            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerConnected);
+            
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.spawnPlayer);
             msg.AddUShort(fromClient);
             msg.AddString(username);
             NetworkManager.Server.SendToAll(msg);
@@ -54,9 +68,8 @@ namespace DungeonMastersServer.Services
             {
                 if(fromClient == player.Key) continue;
                 
-                var existingPlayer = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.playerConnected);
+                var existingPlayer = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.spawnPlayer);
                 existingPlayer.AddUShort(player.Key);
-                Console.WriteLine(player.Value.Username);
                 existingPlayer.AddString(player.Value.Username);
                 NetworkManager.Server.Send(existingPlayer, fromClient);
             }

@@ -30,18 +30,19 @@ public class PlayerManager : MonoBehaviour
         if(id == NetworkManager.Singleton.Client.Id){
             player.SetAsLocal();
             LocalPlayer = player;
+            FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
         }
         player.SetUsername(username);
-        //FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
+        
 
-        player.name = $"Player {id} (username)";
+        player.name =username;
         player.Id = id;
 
         PlayerDictionary.TryAdd(id, player);
         foreach (var keyValuePair in PlayerDictionary)
         {
-            Debug.Log(keyValuePair);
+            //Debug.Log(keyValuePair);
         }
-        Debug.Log("_____________________________________");
+        //Debug.Log("_____________________________________");
     }
 }

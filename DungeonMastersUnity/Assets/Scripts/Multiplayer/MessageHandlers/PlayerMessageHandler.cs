@@ -1,4 +1,5 @@
-﻿using Riptide;
+﻿using System;
+using Riptide;
 using UI;
 using UI.Chat;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Multiplayer.MessageHandlers
         [SerializeField] private PlayerManager playerManager;
         private Chat _chat;
         private static PlayerMessageHandler _singleton;
-        private HealthBar _healthBar;
+        [SerializeField] private HealthBar _healthBar;
 
         public static PlayerMessageHandler Singleton
         {
@@ -41,7 +42,6 @@ namespace Multiplayer.MessageHandlers
         private void Start()
         {
             _chat = FindFirstObjectByType<Chat>();
-            _healthBar = FindFirstObjectByType<HealthBar>();
         }
 
         private void Spawn(ushort id, string username, Vector3 position)
@@ -61,16 +61,14 @@ namespace Multiplayer.MessageHandlers
             _chat.AddMessage(username, message);
         }
 
-        private void GameStarted()
+        private void LoadGameScene()
         {
             StartCoroutine(SceneLoader.LoadSceneAsync(2, () =>
             {
-                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
-                var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME);
-                msg.AddString(NetworkManager.Singleton.UserName);
+                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_GAME_SCENE_LOADED);
                 NetworkManager.Singleton.Client.Send(msg);
-                NetworkManager.Singleton.Client.Send(msg2);
             }));
+            
         }
 
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
@@ -79,10 +77,13 @@ namespace Multiplayer.MessageHandlers
             _singleton.SendMsg(message.GetString(), message.GetString());
         }
 
-        [MessageHandler((ushort)ServerToClientId.playerConnected)]
+        [MessageHandler((ushort)ServerToClientId.spawnPlayer)]
         private static void SpawnPlayer(Message message)
         {
-            _singleton.Spawn(message.GetUShort(), message.GetString(), Vector3.zero);
+            var spawnId = message.GetUShort();
+            string username = message.GetString();
+            Debug.Log("spawn " + username);
+            _singleton.Spawn(spawnId, username, Vector3.zero);
         }
 
         [MessageHandler((ushort)ServerToClientId.playerDisconnected)]
@@ -106,12 +107,16 @@ namespace Multiplayer.MessageHandlers
             Singleton.HandleReady(message.GetBool());
         }
 
-        [MessageHandler((ushort)ServerToClientId.LOBBY_GameStarted)]
+        [MessageHandler((ushort)ServerToClientId.LOBBY_SWITCH_TO_GAME_SCENE)]
+        private static void SwitchToGame(Message message)
+        {
+            Singleton.LoadGameScene();
+        }
+        [MessageHandler((ushort)ServerToClientId.GAME_STARTED)]
         private static void GameStarted(Message message)
         {
-            Singleton.GameStarted();
+            
         }
-
         [MessageHandler((ushort)ServerToClientId.playerTeleport)]
         private static void PlayerTeleport(Message message)
         {
@@ -127,8 +132,10 @@ namespace Multiplayer.MessageHandlers
         {
             var currentHealth = message.GetInt();
             var maxHealth = message.GetInt();
-
-            Singleton._healthBar.SetHealth(currentHealth, maxHealth);
+            if(Singleton._healthBar == null){
+                Singleton._healthBar = FindFirstObjectByType<HealthBar>();
+            }
+            Singleton._healthBar.SetHealth(80, 100);
         }
     }
 }

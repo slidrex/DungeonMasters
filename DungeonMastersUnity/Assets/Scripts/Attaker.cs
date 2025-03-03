@@ -31,6 +31,7 @@ public class Attaker : MonoBehaviour
                 {
                     Message msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.GAME_REQUESTHIT);
                     msg.AddUShort(player.Id);
+                    NetworkManager.Singleton.Client.Send(msg);
                 }
             }
         }

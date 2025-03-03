@@ -36,10 +36,8 @@ namespace DungeonMastersServer.Services
 
             if(readyPlayerCount == playerCount)
             {
-                StateManagerService.Service.SetState(GameState.InGame);
-                // засунь туда, где происходит свич ту гейм!
-                // _ = GameService.Service.GameLoop();
-                // Console.WriteLine("Started game rounds loop");
+                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.LOBBY_SWITCH_TO_GAME_SCENE);
+                NetworkManager.Server.SendToAll(msg);
             }
 
         }

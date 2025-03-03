@@ -26,10 +26,24 @@ namespace DungeonMastersServer.MessageHandlers
             ClientService.Service.SpawnNewPlayer(fromClient, message.GetString());
         }
 
-        [MessageHandler((ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME)]
-        private static void HandleSwitchGame(ushort fromClient, Message message)
+        [MessageHandler((ushort)ClientToServerId.LOBBY_GAME_SCENE_LOADED)]
+        private static void ClientGameSceneLoaded(ushort fromClient, Message message)
         {
-            ClientService.Service.TransportAllPlayers();
+            var client = ClientRepository.Service.GetPlayer(fromClient).GetLobbyData();
+            client.SetAsLoad();
+            ClientService.Service.SpawnNewPlayer(fromClient, client.Player.Username, false);
+
+            if (ClientService.Service.CheckAllPlayersLoadGame())
+            {
+                ChatMessageService.Service.SendSystemChatMessage("Game starts in " + 5 + " seconds");
+                _ = GameService.Service.SetTimer(5, () =>
+                {
+                    StateManagerService.Service.SetState(GameState.InGame);
+                    ChatMessageService.Service.SendSystemChatMessage("Game started!");
+                });
+                
+            }
+            
         }
     }
 }

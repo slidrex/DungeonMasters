@@ -27,7 +27,7 @@ namespace DungeonMastersServer.Services
             if (CurrentState == GameState.InLobby && state == GameState.InGame)
             {
                 GameStarted?.Invoke();
-                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.LOBBY_GameStarted);
+                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_STARTED);
                 NetworkManager.Server.SendToAll(msg);
 
                 var players = ClientRepository.Service.GetPlayers();
@@ -36,6 +36,8 @@ namespace DungeonMastersServer.Services
                 {
                     player.Value.SetPlayerStateData(new PlayerGameData());
                 }
+
+                _ = GameService.Service.GameLoop();
             }
             CurrentState = state;
         }

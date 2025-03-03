@@ -14,7 +14,7 @@ public enum RoundState
 
 public class GameService : SingletonService<GameService>
 {
-    private RoundState _roundState = RoundState.RoundActive;
+    private RoundState _roundState = RoundState.RoundEnded;
 
     public int RoundCounter { get; private set; } = 1;
     public void HitRequest(ushort target, ushort attacker, int damage)
@@ -84,12 +84,20 @@ public class GameService : SingletonService<GameService>
         else 
             playerGameData.AddGold(5);
     }
+    public async Task SetTimer(byte seconds, Action onTimerEnd)
+    {
+        
+        await Task.Delay(seconds * 1000);
+        var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.REMOVE_UI_TIMER);
+        NetworkManager.Server.SendToAll(msg2);
+        onTimerEnd.Invoke();
+    }
 
     public async Task GameLoop()
     {
         if (_roundState == RoundState.RoundActive)
         {
-            await Task.Delay(10000);
+            await Task.Delay(40000);
             _roundState = RoundState.RoundEnded;
             Console.WriteLine("Round end");
             _ = GameLoop();

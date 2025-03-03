@@ -31,7 +31,7 @@ namespace DungeonMastersServer.Repositories
                 playerData.Health -= (damage + 5);
             else
                 playerData.Health -= damage;
-            SetPlayer(id, player);
+            
         }
 
         public int GetPlayerMaxHealth(ushort id)

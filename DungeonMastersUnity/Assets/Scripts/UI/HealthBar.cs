@@ -9,7 +9,8 @@ namespace UI
 
         public void SetHealth(int currentHealth, int maxHealth)
         {
-            healthFill.fillAmount = (float)currentHealth / (float)maxHealth;
+            Debug.Log($"{currentHealth} {maxHealth}");
+            healthFill.fillAmount = (float)currentHealth / maxHealth;
         }
     }
 }
