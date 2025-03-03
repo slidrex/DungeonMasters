@@ -13,5 +13,9 @@ namespace DungeonMastersServer.Models.InGameModels.Items
         internal abstract ushort Id { get; }
         internal abstract string Title { get;  }
         internal abstract string GetDescription();
+        protected void BreakItem()
+        {
+
+        }
     }
 }

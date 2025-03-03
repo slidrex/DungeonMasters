@@ -1,4 +1,5 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items;
+using DungeonMastersServer.Models.InGameModels.Items.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +40,14 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         private List<Item> _items = new List<Item>(); 
 
         private List<PlayerBuffState> _buffs = new List<PlayerBuffState>();
-        
-        public void OnHitTaken()
+        public Item HandItem { get; private set; }
+        public void OnHitTaken(ushort attackerId)
         {
-
+            foreach(var item in _items)
+            {
+                var armor = item as IArmor;
+                armor?.OnHit(attackerId);
+            }
         }
         public void OnAttack()
         {
@@ -50,11 +55,11 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         }
         public void OnNewRoundStarted()
         {
-
-        }
-        public void OnNewRoundEnd()
-        {
-
+            foreach (var item in _items)
+            {
+                var roundDependant = item as IRoundDependant;
+                roundDependant?.OnRoundStarted();
+            }
         }
 
         public override void EnterState()

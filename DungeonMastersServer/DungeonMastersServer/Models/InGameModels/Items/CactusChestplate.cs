@@ -1,5 +1,4 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Interfaces;
-using DungeonMastersServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,22 +7,23 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.InGameModels.Items
 {
-    internal sealed class WoodenSword : Item, IHitItem
+    class CactusChestplate : Item, IArmor
     {
-        public int Damage => 15;
+        public int Armor => 25;
 
-        internal override ushort Id => 2;
+        internal override ushort Id => 3;
 
-        internal override string Title => "Wooden sword";
+        internal override string Title => "Cactus armor";
 
-        public void OnHit(ushort targetId)
+        public void OnHit(ushort attackerId)
         {
-            
+            //бьем аттакера
+            BreakItem();
         }
 
         internal override string GetDescription()
         {
-            return "Does damage";
+            return "Does damage to attacker";
         }
     }
 }

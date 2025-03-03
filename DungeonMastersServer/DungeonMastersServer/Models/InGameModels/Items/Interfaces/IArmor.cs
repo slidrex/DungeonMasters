@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Interfaces
 {
-    interface IHitItem
+    interface IArmor
     {
-        int Damage { get;  }
-        void OnHit(ushort targetId);
+        int Armor { get; }
+        void OnHit(ushort attackerId);
     }
 }
