@@ -16,7 +16,6 @@ namespace DungeonMastersServer.Repositories
         public void AddPlayer(ushort id, PlayerClient client)
         {
             _players.Add(id, client);
-            var players = _players.ToArray();
         }
         public KeyValuePair<ushort, PlayerClient>[] GetPlayers()
         {

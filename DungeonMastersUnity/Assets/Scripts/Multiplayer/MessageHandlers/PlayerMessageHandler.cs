@@ -9,7 +9,7 @@ namespace Multiplayer.MessageHandlers
     public class PlayerMessageHandler : MonoBehaviour
     {
         [SerializeField] private PlayerManager playerManager;
-        private Chat chat;
+        private Chat _chat;
         private static PlayerMessageHandler _singleton;
         private HealthBar _healthBar;
 
@@ -40,7 +40,7 @@ namespace Multiplayer.MessageHandlers
 
         private void Start()
         {
-            chat = FindFirstObjectByType<Chat>();
+            _chat = FindFirstObjectByType<Chat>();
             _healthBar = FindFirstObjectByType<HealthBar>();
         }
 
@@ -56,20 +56,21 @@ namespace Multiplayer.MessageHandlers
 
         private void SendMsg(string username, string message)
         {
-            if (chat == null) chat = FindFirstObjectByType<Chat>();
+            if (_chat == null) _chat = FindFirstObjectByType<Chat>();
 
-            chat.AddMessage(username, message);
+            _chat.AddMessage(username, message);
         }
 
         private void GameStarted()
         {
-            playerManager.DespawnAllPlayers();
-            SceneManager.LoadScene(2);
-            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
-            var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME);
-            msg.AddString(NetworkManager.Singleton.UserName);
-            NetworkManager.Singleton.Client.Send(msg);
-            NetworkManager.Singleton.Client.Send(msg2);
+            StartCoroutine(SceneLoader.LoadSceneAsync(2, () =>
+            {
+                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
+                var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME);
+                msg.AddString(NetworkManager.Singleton.UserName);
+                NetworkManager.Singleton.Client.Send(msg);
+                NetworkManager.Singleton.Client.Send(msg2);
+            }));
         }
 
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
@@ -93,7 +94,7 @@ namespace Multiplayer.MessageHandlers
         [MessageHandler((ushort)ServerToClientId.playerMovement)]
         private static void PlayerMovement(Message message)
         {
-            if (PlayerManager.list.TryGetValue(message.GetUShort(), out PlayerController player))
+            if (PlayerManager.PlayerDictionary.TryGetValue(message.GetUShort(), out PlayerController player))
             {
                 player.Move(message.GetVector2());
             }
@@ -117,7 +118,7 @@ namespace Multiplayer.MessageHandlers
             var fromClient = message.GetUShort();
             var pos = message.GetVector2();
 
-            var player = PlayerManager.list[fromClient];
+            var player = PlayerManager.PlayerDictionary[fromClient];
             player.Move(pos);
         }
 

@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerManager.list.Remove(Id);
+        PlayerManager.PlayerDictionary.Remove(Id);
     }
 
     private void FixedUpdate()

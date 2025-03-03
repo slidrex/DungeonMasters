@@ -1,4 +1,5 @@
-﻿using DungeonMastersServer.Services;
+﻿using DungeonMastersServer.Repositories;
+using DungeonMastersServer.Services;
 using Riptide;
 
 namespace DungeonMastersServer.MessageHandlers
@@ -26,7 +27,7 @@ namespace DungeonMastersServer.MessageHandlers
         }
 
         [MessageHandler((ushort)ClientToServerId.LOBBY_SWITCH_TO_GAME)]
-        private static void HendleSwitchGame(ushort fromClient, Message message)
+        private static void HandleSwitchGame(ushort fromClient, Message message)
         {
             ClientService.Service.TransportAllPlayers();
         }
