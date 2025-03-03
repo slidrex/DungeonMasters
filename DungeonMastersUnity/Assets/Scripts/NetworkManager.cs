@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Riptide;
 using Riptide.Utils;
 using UnityEngine;
@@ -60,8 +61,7 @@ public class NetworkManager : MonoBehaviour
         message.AddString(chatMessage);
         Singleton.Client.Send(message);
     }
-
-    // Update is called once per frame
+    
     private void FixedUpdate()
     {
         Client.Update();
@@ -72,10 +72,14 @@ public class NetworkManager : MonoBehaviour
     }
     private void DidConnect(object sender, EventArgs e)
     {
-        SceneManager.LoadScene(1);
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
-        msg.AddString(UserName);
-        Singleton.Client.Send(msg);
+        StartCoroutine(SceneLoader.LoadSceneAsync(1, () =>
+        {
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.LOBBY_LOAD_PLAYERS);
+            msg.AddString(UserName);
+            Singleton.Client.Send(msg);
+            Debug.Log("Client connected");
+        }));
+        
     }
     private void DidDisconnect(object sender, EventArgs e)
     {

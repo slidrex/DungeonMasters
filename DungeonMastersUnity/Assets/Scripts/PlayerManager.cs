@@ -8,15 +8,22 @@ using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static Dictionary<ushort, PlayerController> list = new();
+    public static Dictionary<ushort, PlayerController> PlayerDictionary {get; private set;}
     public PlayerController LocalPlayer { get; private set; }
-    
+
+
+    private void Start()
+    {
+        PlayerDictionary ??= new Dictionary<ushort, PlayerController>();
+    }
+
     public void Despawn(ushort id)
     {
-        var player = list[id];
-        list.Remove(id);
+        var player = PlayerDictionary[id];
+        PlayerDictionary.Remove(id);
         Destroy(player.gameObject);
     }
+    
     public void Spawn(ushort id, string username, Vector3 position)
     {
         PlayerController player = Instantiate(GameLogic.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<PlayerController>();
@@ -25,11 +32,16 @@ public class PlayerManager : MonoBehaviour
             LocalPlayer = player;
         }
         player.SetUsername(username);
-        FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
+        //FindFirstObjectByType<FollowingCamera>().SetTarget(player.transform);
 
         player.name = $"Player {id} (username)";
         player.Id = id;
 
-        list.TryAdd(id, player);
+        PlayerDictionary.TryAdd(id, player);
+        foreach (var keyValuePair in PlayerDictionary)
+        {
+            Debug.Log(keyValuePair);
+        }
+        Debug.Log("_____________________________________");
     }
 }

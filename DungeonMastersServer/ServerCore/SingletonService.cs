@@ -13,7 +13,7 @@ namespace DungeonMastersServer.MessageHandlers
     {
         public static T Service { get; set; }
 
-        public void Init()
+        public virtual void Init()
         {
             Service = (T)this; 
         }

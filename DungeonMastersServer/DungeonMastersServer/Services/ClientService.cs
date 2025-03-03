@@ -83,10 +83,10 @@ namespace DungeonMastersServer.Services
         private void RestoreServer()
         {
             if (StateManagerService.Service.CurrentState != GameState.InLobby)
-            {
-                ClientRepository.Service.ClearPlayers();
                 StateManagerService.Service.SetState(GameState.InLobby);
-            }
+            
+            ClientRepository.Service.ClearPlayers();
+            Console.WriteLine("Server is empty, reloaded server");
         }
         public void TransportPlayer(ushort fromClient, Vector2 position)
         {
@@ -113,11 +113,13 @@ namespace DungeonMastersServer.Services
                 new Vector2(-10, -8),
                 new Vector2(10, -8),
             };
-            
-            foreach (var (player, index) in players.Select((p, i) => (p, i)))
+
+            var i = 0;
+            foreach (var (index, player) in players)
             {
-                _ = FreezePlayer(player.Key);
-                TransportPlayer(player.Key, positions[index]);
+                _ = FreezePlayer(index);
+                TransportPlayer(index, positions[i]);
+                i++;
             }
 
         }
