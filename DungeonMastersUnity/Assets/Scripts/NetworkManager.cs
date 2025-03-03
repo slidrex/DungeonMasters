@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
+
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager _singleton;

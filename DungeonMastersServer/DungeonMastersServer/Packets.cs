@@ -48,5 +48,5 @@ enum ServerToClientId
 
 
     SEND_MARKETABLE_ITEMS = 201,
-    SEND_PLAYER_ITEMS = 202,
+    SEND_PLAYER_ITEMS = 202
 }

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Riptide;
 using UI;
 using UI.Chat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using UI.Market;
 
 namespace Multiplayer.MessageHandlers
 {
@@ -137,5 +140,21 @@ namespace Multiplayer.MessageHandlers
             }
             Singleton._healthBar.SetHealth(80, 100);
         }
+        //TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO
+        // СДЕЛАТЬ НА КЛИЕНТЕ ТЕ ЖЕ КЛАССЫ MarketSlot и Item и прочую хуйню чтобы нормально сериализовать строку в объект
+        /*[MessageHandler((ushort)ServerToClientId.SEND_MARKETABLE_ITEMS)]
+        private static void GetMarketableItems(Message message)
+        {
+            var marketableItemsString = message.GetStrings();
+
+            var marketableItems = new List<MarketSlot>();
+            foreach (var itemJson in marketableItemsString)
+            {
+                Debug.Log(itemJson);
+                var marketSlot = JsonUtility.FromJson<MarketSlot>(itemJson);
+                marketableItems.Add(marketSlot);
+            }
+            
+        }*/
     }
 }
