@@ -3,6 +3,7 @@ using DungeonMastersServer.Models.Player;
 using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
 using Riptide;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonMastersServer.Services;
 
@@ -21,23 +22,29 @@ public class GameService : SingletonService<GameService>
     {
         var attackerPlayer = ClientRepository.Service.GetPlayer(attacker);
         var targetPlayer = ClientRepository.Service.GetPlayer(target);
-        
-        ClientRepository.Service.DamagePlayer(target, damage);
+
         ChatMessageService.Service.SendSystemChatMessage($"{attackerPlayer.Username} hit {targetPlayer.Username}!");
+        DamagePlayer(targetPlayer.GetGameData(), attackerPlayer.GetGameData(), target, damage);
 
-        var targetPlayerGameData = targetPlayer.GetGameData();
-        var targetHealth = targetPlayerGameData.Health;
-        
-        var targetMaxHealth = targetPlayerGameData.MaxHealth;
+    }
+    internal void DamagePlayer(PlayerGameData target, PlayerGameData attacker, ushort targetId, int damage)
+    {
 
-        if (targetPlayerGameData.Health <= 0)
-            KillPlayer(targetPlayerGameData);
+        target.Health -= (damage + 5);
         
+
+        var targetHealth = target.Health;
+
+        var targetMaxHealth = target.MaxHealth;
+
+        if (target.Health <= 0)
+            KillPlayer(target);
+
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
         msg.AddInt(targetHealth);
         msg.AddInt(targetMaxHealth);
-        
-        NetworkManager.Server.Send(msg, target);
+
+        NetworkManager.Server.Send(msg, targetId);
     }
     public void OnPlayerHitDone()
     {

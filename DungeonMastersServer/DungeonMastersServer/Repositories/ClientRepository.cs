@@ -22,17 +22,6 @@ namespace DungeonMastersServer.Repositories
             return _players.ToArray();
         }
 
-        public void DamagePlayer(ushort id, int damage)
-        {
-            var player = GetPlayer(id);
-            var playerData = player.GetGameData();
-            var playerBuffs = playerData.GetBuffs();
-            if (playerBuffs.Contains(PlayerBuffState.StrengthLevel1))
-                playerData.Health -= (damage + 5);
-            else
-                playerData.Health -= damage;
-            
-        }
 
         public bool AreAllPlayersEndTurn()
         {

@@ -1,10 +1,12 @@
-﻿using DungeonMastersServer.Models.InGameModels.Items.Interfaces;
+﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
+using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 
-namespace DungeonMastersServer.Models.InGameModels.Items
+namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
 
     internal sealed class HekClothes : Item, IArmor
     {
+        protected override SlotType SlotType => SlotType.Armor;
         public int Armor => 0;
 
         internal override ushort Id => 6;

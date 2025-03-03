@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DungeonMastersServer.Models.InGameModels.Items
+namespace DungeonMastersServer.Models.InGameModels.Items.Abstract
 {
     internal abstract class Item
     {
+        protected abstract SlotType SlotType { get; }
         protected PlayerGameData Data { get; set; }
         internal abstract ushort Id { get; }
         internal abstract string Title { get;  }
@@ -17,5 +18,13 @@ namespace DungeonMastersServer.Models.InGameModels.Items
         {
 
         }
+
+    }
+    enum SlotType
+    {
+        Magic,
+        Armor,
+        Weapon,
+        Artifact
     }
 }

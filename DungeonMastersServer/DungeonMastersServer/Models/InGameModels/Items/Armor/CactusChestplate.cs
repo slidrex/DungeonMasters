@@ -1,15 +1,18 @@
-﻿using DungeonMastersServer.Models.InGameModels.Items.Interfaces;
+﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
+using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DungeonMastersServer.Models.InGameModels.Items
+namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
     class CactusChestplate : Item, IArmor
     {
         public int Armor => 25;
+
+        protected override SlotType SlotType => SlotType.Armor;
 
         internal override ushort Id => 3;
 

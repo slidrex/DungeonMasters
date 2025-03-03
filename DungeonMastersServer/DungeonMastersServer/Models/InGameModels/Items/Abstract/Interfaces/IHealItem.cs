@@ -1,4 +1,4 @@
-﻿namespace DungeonMastersServer.Models.InGameModels.Items.Interfaces;
+﻿namespace DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 
 public interface IHealItem
 {

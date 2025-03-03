@@ -1,5 +1,5 @@
-﻿using DungeonMastersServer.Models.InGameModels.Items;
-using DungeonMastersServer.Models.InGameModels.Items.Interfaces;
+﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
+using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
