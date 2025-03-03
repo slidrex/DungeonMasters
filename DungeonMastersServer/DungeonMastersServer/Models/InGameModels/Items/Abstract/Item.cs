@@ -1,4 +1,5 @@
 ﻿using DungeonMastersServer.Models.Player.PlayerDatas;
+using DungeonMastersServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Abstract
     {
         protected abstract SlotType SlotType { get; }
         protected PlayerGameData Data { get; set; }
-        internal abstract ushort Id { get; }
         internal abstract string Title { get;  }
         internal abstract string GetDescription();
         protected void BreakItem()

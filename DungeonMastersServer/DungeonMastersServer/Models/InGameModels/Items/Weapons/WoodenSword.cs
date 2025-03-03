@@ -14,7 +14,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
         protected override SlotType SlotType => SlotType.Weapon;
         public int Damage => 15;
 
-        internal override ushort Id => 2;
 
         internal override string Title => "Wooden sword";
 
@@ -25,7 +24,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
         internal override string GetDescription()
         {
-            return "Does damage";
+            return $"Наносит {Damage} урона";
         }
     }
 }

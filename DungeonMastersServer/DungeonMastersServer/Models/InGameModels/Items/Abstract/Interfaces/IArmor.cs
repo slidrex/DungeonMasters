@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonMastersServer.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces
     {
 
         int Armor { get; }
-        void OnHit(ushort attackerId);
+        void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier);
+        void OnAfterHit(ushort attackerId, DamageType damageType);
     }
 }

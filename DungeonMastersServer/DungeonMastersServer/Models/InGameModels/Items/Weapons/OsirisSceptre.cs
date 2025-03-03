@@ -10,8 +10,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
         public int Damage => 30;
 
         public int Heal => 10;
-
-        internal override ushort Id => 4;
         
         internal override string Title => "Osiris Sceptre";
         

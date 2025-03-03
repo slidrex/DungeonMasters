@@ -11,7 +11,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
     internal sealed class MagicApple : Item, IRoundDependant
     {
         protected override SlotType SlotType => SlotType.Magic;
-        internal override ushort Id => 0;
         internal override string Title => "Magic Apple";
         public void OnRoundStarted()
         {

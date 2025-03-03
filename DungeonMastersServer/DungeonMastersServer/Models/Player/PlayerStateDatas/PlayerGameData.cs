@@ -1,8 +1,11 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
+using DungeonMastersServer.Services;
+using Riptide;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,24 +37,102 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         public int MaxHealth { get; set; } 
         
         public PlayerLifeState LifeState { get; private set; }
-
         public bool EndTurn { get; set; }
         public int Gold { get; private set; }
         private List<Item> _items = new List<Item>(); 
-
-        private List<PlayerBuffState> _buffs = new List<PlayerBuffState>();
         public Item HandItem { get; private set; }
-        public void OnHitTaken(ushort attackerId)
+        public Item CarriedArmorItem { get; private set; }
+        private float _armorMultiplier { get; set; }
+        private int _armorExtractor { get; set; }
+        private float _damageMultiplier { get; set; }
+        private int _damageAddUnits { get; set; }
+        public void Damage(ushort attackerId, int damage, DamageType damageType)
         {
-            foreach(var item in _items)
+            
+            foreach (var item in _items)
             {
-                var armor = item as IArmor;
-                armor?.OnHit(attackerId);
-            }
-        }
-        public void OnAttack()
-        {
 
+                if (item is IIncomingDamageMultiplier multiplier)
+                {
+                    damage = (int)(damage * multiplier.GetIncomingDamageMultiplier(attackerId, damageType));
+                }
+            }
+            if (CarriedArmorItem != null)
+            {
+                ((IArmor)CarriedArmorItem).OnBeforeHit(attackerId, damageType, out float multiplier);
+                damage = (int)(damage * multiplier);
+            }
+            if (damageType == DamageType.Physical)
+            {
+                damage -= GetMasterArmor();
+            }
+            Health -= damage;
+            
+            var targetHealth = Health;
+
+            var targetMaxHealth = MaxHealth;
+
+            if (Health <= 0)
+                KillPlayer();
+
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
+            msg.AddInt(targetHealth);
+            msg.AddInt(targetMaxHealth);
+
+            NetworkManager.Server.Send(msg, PlayerClient.ClientId);
+        }
+        public void AddArmorMultiplier(float multiplier)
+        {
+            _armorMultiplier += multiplier;
+        }
+        public void AddArmorUnit(int units)
+        {
+            _armorExtractor += units;
+        }
+        public void AddDamageMultiplier(float multiplier)
+        {
+            _damageMultiplier += multiplier;
+        }
+        public void AddDamageUnit(int units)
+        {
+            _damageAddUnits += units;
+        }
+        public void AttachItem(Item item)
+        {
+            if(item is IMountable mountable){
+                mountable.OnMount();
+            }
+            _items.Add(item);
+        }
+        public void DettachItem(Item item)
+        {
+            if (item is IMountable mountable)
+            {
+                mountable.OnUnmount();
+            }
+            _items.Remove(item);
+        }
+        public int GetMasterArmor()
+        {
+            int masterArmor = 0;
+            
+            if(CarriedArmorItem != null)
+            {
+                masterArmor += ((IArmor)CarriedArmorItem).Armor;
+            }
+            masterArmor = (int)((masterArmor + _armorExtractor) * _armorMultiplier);
+
+            return masterArmor;
+        }
+        public int GetMasterDamage()
+        {
+            int masterDamage = 10;
+            if (HandItem != null && HandItem is IHitItem hit)
+            {
+                masterDamage = hit.Damage;
+            }
+
+            return (int)((masterDamage + _damageAddUnits) * _damageMultiplier);
         }
         public void OnNewRoundStarted()
         {
@@ -69,28 +150,9 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
             LifeState = PlayerLifeState.Alive;
             Gold = 5;
         }
-
-        public List<PlayerBuffState> GetBuffs()
-        {
-            return _buffs;
-        }
-
-        public void AddBuff(PlayerBuffState buff)
-        {
-            _buffs.Add(buff);
-        }
         public void AddGold(int amount)
         {
-
-            if (_buffs.Contains(PlayerBuffState.MoreGold))
-                Gold += amount + 5;
-            else
-                Gold += amount;
-        }
-
-        public void RemoveGold(int amount)
-        {
-            Gold -= amount;
+            Gold += amount;
         }
         
         public void KillPlayer()
@@ -98,9 +160,5 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
             LifeState = PlayerLifeState.Dead;
         }
 
-        public void HealPlayer(int amount)
-        {
-            Health += amount;
-        }
     }
 }

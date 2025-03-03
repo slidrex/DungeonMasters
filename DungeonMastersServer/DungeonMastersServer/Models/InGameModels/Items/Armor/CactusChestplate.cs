@@ -1,5 +1,6 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
+using DungeonMastersServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,19 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         protected override SlotType SlotType => SlotType.Armor;
 
-        internal override ushort Id => 3;
 
         internal override string Title => "Cactus armor";
 
-        public void OnHit(ushort attackerId)
+        public void OnAfterHit(ushort attackerId, DamageType damageType)
         {
-            //бьем аттакера
             BreakItem();
         }
+
+        public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)
+        {
+            incomingDamageMultiplier = 1;
+        }
+
 
         internal override string GetDescription()
         {

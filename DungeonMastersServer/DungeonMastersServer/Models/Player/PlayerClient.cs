@@ -15,12 +15,14 @@ namespace DungeonMastersServer.Models.Player
 
         public bool Freezed { get; private set; }
         public Vector2 Position { get; set; }
+        public readonly ushort ClientId;
         
         private PlayerStateData _stateData { get; set; }
-        public PlayerClient(string username, PlayerStateData stateData)
+        public PlayerClient(ushort clientId, string username, PlayerStateData stateData)
         {
             SetPlayerStateData(stateData);
             Username = username;
+            ClientId = clientId;
             Freezed = false;
         }
 

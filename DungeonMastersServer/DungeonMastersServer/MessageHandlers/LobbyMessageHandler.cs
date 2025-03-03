@@ -31,7 +31,7 @@ namespace DungeonMastersServer.MessageHandlers
         {
             var client = ClientRepository.Service.GetPlayer(fromClient).GetLobbyData();
             client.SetAsLoad();
-            ClientService.Service.SpawnNewPlayer(fromClient, client.Player.Username, false);
+            ClientService.Service.SpawnNewPlayer(fromClient, client.PlayerClient.Username, false);
 
             if (ClientService.Service.CheckAllPlayersLoadGame())
             {

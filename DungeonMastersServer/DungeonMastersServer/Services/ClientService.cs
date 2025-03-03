@@ -27,7 +27,7 @@ namespace DungeonMastersServer.Services
                 NetworkManager.Server.DisconnectClient(fromClient);
             }
             Console.WriteLine(username + " connected the game!");
-            var player = new Models.Player.PlayerClient(username, new PlayerLobbyData());
+            var player = new Models.Player.PlayerClient(fromClient, username, new PlayerLobbyData());
             ClientRepository.Service.AddPlayer(fromClient, player);
         }
         internal bool CheckAllPlayersLoadGame()

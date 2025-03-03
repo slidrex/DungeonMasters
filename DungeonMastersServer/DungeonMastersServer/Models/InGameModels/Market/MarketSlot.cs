@@ -10,9 +10,16 @@ namespace DungeonMastersServer.Models.InGameModels.Market
 {
     internal record MarketSlot
     {
-        public Item Item { get; set; }
-        public int BuyPrice { get; set; }
-        public int SellPrice { get; set; }
-        public Item ItemPrice { get; set; } // Для предметов которые можно улучшать
+        public Item Item { get;  }
+        public int BuyPrice { get; }
+        public int SellPrice { get; }
+        public Item? ItemPrice { get; } // Для предметов которые можно улучшать
+        public MarketSlot(Item item, int buyPrice, int sellPrice, Item? itemPrice = null)
+        {
+            Item = item;
+            BuyPrice = buyPrice;
+            SellPrice = sellPrice;
+            ItemPrice = itemPrice;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DungeonMastersServer.MessageHandlers;
+using DungeonMastersServer.Models.InGameModels.Market;
 using DungeonMastersServer.Models.Player;
 using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
@@ -7,16 +8,38 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonMastersServer.Services;
 
-public enum RoundState
+internal enum RoundState
 {
     BuyStage = 0,
     GameStage = 1
 }
+internal enum DamageType
+{
+    Physical,
+    Magical,
+    ExtractHealth
+}
+/*
+internal enum ItemId
+{
+    MagicApple_LEVEL1 = 1,
+    GoldenScarab = 2,
+    PlusDamageMinusArmor = 3,
+    TotAmulet = 4,
+    OsirisSceptre = 5,
+    SetSceptre = 6,
+    WoodenSword = 7,
+    CactusChestplate = 8,
+    HekClothes = 9,
+    RaShield = 10,
+    WipeDamageIdMagical = 11
+}
+*/
 
 public class GameService : SingletonService<GameService>
 {
     private RoundState _roundState = RoundState.BuyStage;
-
+    
     public int RoundCounter { get; private set; } = 1;
     public void HitRequest(ushort target, ushort attacker, int damage)
     {
@@ -24,45 +47,9 @@ public class GameService : SingletonService<GameService>
         var targetPlayer = ClientRepository.Service.GetPlayer(target);
 
         ChatMessageService.Service.SendSystemChatMessage($"{attackerPlayer.Username} hit {targetPlayer.Username}!");
-        DamagePlayer(targetPlayer.GetGameData(), attackerPlayer.GetGameData(), target, damage);
 
-    }
-    internal void DamagePlayer(PlayerGameData target, PlayerGameData attacker, ushort targetId, int damage)
-    {
+        targetPlayer.GetGameData().Damage(attacker, damage, DamageType.Physical);
 
-        target.Health -= (damage + 5);
-        
-
-        var targetHealth = target.Health;
-
-        var targetMaxHealth = target.MaxHealth;
-
-        if (target.Health <= 0)
-            KillPlayer(target);
-
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_HURT_PLAYER);
-        msg.AddInt(targetHealth);
-        msg.AddInt(targetMaxHealth);
-
-        NetworkManager.Server.Send(msg, targetId);
-    }
-    public void OnPlayerHitDone()
-    {
-
-    }
-
-    private void KillPlayer(PlayerGameData playerGameData)
-    {
-        playerGameData.KillPlayer();
-
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_PLAYER_DEAD);
-
-        NetworkManager.Server.SendToAll(msg);
-    }
-
-    private void HealPlayer(PlayerGameData playerGameData, int healAmount)
-    {
-        playerGameData.HealPlayer(healAmount);
     }
 
     public async Task StartNewRound()
@@ -115,11 +102,8 @@ public class GameService : SingletonService<GameService>
 
     private void AddGoldInRoundStart(PlayerGameData playerGameData)
     {
-        var playerBuffs = playerGameData.GetBuffs();
-        if (playerBuffs.Contains(PlayerBuffState.MoreGoldInRoundStartLevel1))
-            playerGameData.AddGold(10);
-        else 
-            playerGameData.AddGold(5);
+
+       playerGameData.AddGold(10);
     }
     public async Task SetTimer(byte seconds, Action onTimerEnd)
     {

@@ -8,11 +8,11 @@ namespace DungeonMastersServer.Models.Player
 {
     public abstract class PlayerStateData
     {
-        internal PlayerClient Player;
+        internal PlayerClient PlayerClient;
         
         internal void AttachPlayer(PlayerClient player)
         {
-            Player = player;
+            PlayerClient = player;
         }
         
         public virtual void EnterState() { }

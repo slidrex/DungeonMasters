@@ -1,12 +1,11 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 
-namespace DungeonMastersServer.Models.InGameModels.Items.Magic
+namespace DungeonMastersServer.Models.InGameModels.Items
 {
 
     internal sealed class GoldenScarab : Item, IRoundDependant
     {
-        internal override ushort Id => 8;
         protected override SlotType SlotType => SlotType.Magic;
         internal override string Title => "Golden Scarab";
         

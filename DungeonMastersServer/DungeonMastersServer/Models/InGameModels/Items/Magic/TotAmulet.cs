@@ -1,5 +1,6 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
+using DungeonMastersServer.Services;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 {
@@ -7,7 +8,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
     internal sealed class TotAmulet : Item, IRoundDependant
     {
         protected override SlotType SlotType => SlotType.Magic;
-        internal override ushort Id => 5;
 
         internal override string Title => "Tot's amulet";
         
