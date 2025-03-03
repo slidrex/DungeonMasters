@@ -1,6 +1,6 @@
 ﻿namespace DungeonMastersServer.Models.Player.PlayerDatas
 {
-    class PlayerLobbyData : PlayerStateData
+    internal sealed class PlayerLobbyData : PlayerStateData
     {
         public float LobbySpeed = 0.04f;
         public bool IsReady { get; private set; }

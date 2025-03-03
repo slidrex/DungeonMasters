@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonMastersServer.Models.InGameModels.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,7 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         MoreGold = 2,
         MoreGoldInRoundStartLevel1 = 3
     }
-    class PlayerGameData : PlayerStateData
+    internal sealed class PlayerGameData : PlayerStateData
     {
         public float DefaultSpeed = 0.04f;
         public int Health { get; set; }
@@ -35,9 +36,27 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         public PlayerLifeState LifeState { get; private set; }
 
         public int Gold { get; private set; }
+        private List<Item> _items = new List<Item>(); 
 
         private List<PlayerBuffState> _buffs = new List<PlayerBuffState>();
         
+        public void OnHitTaken()
+        {
+
+        }
+        public void OnAttack()
+        {
+
+        }
+        public void OnNewRoundStarted()
+        {
+
+        }
+        public void OnNewRoundEnd()
+        {
+
+        }
+
         public override void EnterState()
         {
             MaxHealth = 100;

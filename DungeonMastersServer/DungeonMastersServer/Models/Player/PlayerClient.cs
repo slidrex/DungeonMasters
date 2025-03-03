@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.Player
 {
-    public class PlayerClient
+    public sealed class PlayerClient
     {
         public readonly string Username;
 

@@ -26,20 +26,24 @@ namespace DungeonMastersServer.Services
             GameStateChanged?.Invoke(CurrentState, state);
             if (CurrentState == GameState.InLobby && state == GameState.InGame)
             {
-                GameStarted?.Invoke();
-                var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_STARTED);
-                NetworkManager.Server.SendToAll(msg);
-
-                var players = ClientRepository.Service.GetPlayers();
-
-                foreach (var player in players)
-                {
-                    player.Value.SetPlayerStateData(new PlayerGameData());
-                }
-
-                _ = GameService.Service.GameLoop();
+                OnGameStarted();
             }
             CurrentState = state;
+        }
+        private void OnGameStarted()
+        {
+            GameStarted?.Invoke();
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_STARTED);
+            NetworkManager.Server.SendToAll(msg);
+
+            var players = ClientRepository.Service.GetPlayers();
+
+            foreach (var player in players)
+            {
+                player.Value.SetPlayerStateData(new PlayerGameData());
+            }
+
+            GameService.Service.StartNewRound();
         }
         
     }

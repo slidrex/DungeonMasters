@@ -39,6 +39,10 @@ public class GameService : SingletonService<GameService>
         
         NetworkManager.Server.Send(msg, target);
     }
+    public void OnPlayerHitDone()
+    {
+
+    }
 
     private void KillPlayer(PlayerGameData playerGameData)
     {
@@ -54,7 +58,7 @@ public class GameService : SingletonService<GameService>
         playerGameData.HealPlayer(healAmount);
     }
 
-    private void NewRound()
+    public void StartNewRound()
     {
         ClientService.Service.TransportAllPlayers();
         var players = ClientRepository.Service.GetPlayers();
@@ -74,6 +78,25 @@ public class GameService : SingletonService<GameService>
         _roundState = RoundState.RoundActive;
         RoundCounter++;
         Console.WriteLine($"New round: {RoundCounter}");
+        ChatMessageService.Service.SendSystemChatMessage($"Round {RoundCounter} started");
+
+        //Сначала фризим игроков на 10 секунд (идет закупка). После этого времени отправляем пакет {закупка окончена}.
+
+        //Фриз кончился .отсчитываем 20 секунд раунда. После закупки и начала раунда, игроки могут отправить пакет I'm ready.
+        //Если за 20 секунд раунда не все игроки отправили I'm ready отсчитывается 10 секунд после чего новый раунд начинается принудительно.
+        //Если все игроки нажали Ready, все таймеры сбрасываются, включается новый 5 секундный таймер после чего новый раунд
+    }
+    private void OnBuyStageEnd()
+    {
+
+    }
+    private void PlayerPressedReady()
+    {
+        //if some player press ready
+    }
+    private void OnAllPlayersPressedReady()
+    {
+        //If all players press ready.
     }
 
     private void AddGoldInRoundStart(PlayerGameData playerGameData)
@@ -92,7 +115,7 @@ public class GameService : SingletonService<GameService>
         NetworkManager.Server.SendToAll(msg2);
         onTimerEnd.Invoke();
     }
-
+    /*
     public async Task GameLoop()
     {
         if (_roundState == RoundState.RoundActive)
@@ -107,4 +130,5 @@ public class GameService : SingletonService<GameService>
             _ = GameLoop();
         }
     }
+    */
 }

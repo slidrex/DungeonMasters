@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if(!IsLocal) return;
+if (Input.GetKey(KeyCode.W))
             inputs[0] = true;
 
         if (Input.GetKey(KeyCode.A))
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
             inputs[3] = true;
+        
+        
     }
 
     public void SetUsername(string username)
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(!IsLocal) return;
         if (inputs[0] || inputs[1] || inputs[2] || inputs[3] == true)
         {
             SendInput();
