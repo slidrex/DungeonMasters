@@ -14,7 +14,7 @@ namespace UI.Chat
         {
             style = style ?? MessageStyles.DefaultStyle;
             
-            textMesh.text = $"{userName} :{message}";
+            textMesh.text = $"{userName}: {message}";
             textMesh.ApplyStyle(style);
         }
     }

@@ -39,10 +39,5 @@ public class PlayerManager : MonoBehaviour
         player.Id = id;
 
         PlayerDictionary.TryAdd(id, player);
-        foreach (var keyValuePair in PlayerDictionary)
-        {
-            //Debug.Log(keyValuePair);
-        }
-        //Debug.Log("_____________________________________");
     }
 }
