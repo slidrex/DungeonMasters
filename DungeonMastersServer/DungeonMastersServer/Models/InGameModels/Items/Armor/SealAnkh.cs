@@ -10,17 +10,18 @@ using System.Threading.Tasks;
 namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
     //Passive item
-    class WipeDamageIfMagical : Item, IIncomingDamageMultiplier
+    class SealAnkh : Item, IIncomingDamageMultiplier
     {
         protected override SlotType SlotType => SlotType.Magic;
 
 
-        internal override string Title => "Some item";
+        internal override string Title => "The seal of Ankh";
 
         public float GetIncomingDamageMultiplier(ushort attackerId, DamageType damageType)
         {
             if(damageType == DamageType.Magical)
             {
+                BreakItem();
                 return 0;
             }
             return 1;
@@ -28,7 +29,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         internal override string GetDescription()
         {
-            throw new NotImplementedException();
+            return "The seal of Ankh allows owner block all incoming magic damage. Just for once";
         }
     }
 }

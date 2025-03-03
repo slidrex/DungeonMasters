@@ -9,22 +9,27 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 {
-    internal sealed class WoodenSword : Item, IHitItem
+    internal sealed class WoodenSword : Item, IMountable
     {
         protected override SlotType SlotType => SlotType.Weapon;
-        public int Damage => 15;
-
+        
+        private int _damage = 10;
 
         internal override string Title => "Wooden sword";
 
-        public void OnHit(ushort targetId)
+        public void OnMount()
         {
-            
+            Data.AddDamageUnit(_damage);
+        }
+
+        public void OnUnmount()
+        {
+            Data.AddDamageUnit(-_damage);
         }
 
         internal override string GetDescription()
         {
-            return $"Наносит {Damage} урона";
+            return $"Наносит {_damage} урона";
         }
     }
 }

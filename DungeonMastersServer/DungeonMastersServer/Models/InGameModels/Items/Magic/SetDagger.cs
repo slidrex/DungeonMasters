@@ -9,31 +9,30 @@ using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 {
-    class PlusDamageMinusArmor : Item, IMountable
+    class SetDagger : Item, IMountable
     {
         protected override SlotType SlotType => SlotType.Magic;
 
-        internal override string Title => "Some item";
+        internal override string Title => "Set's Dagger";
 
-        private int RemoveArmorValue = 10;
-        private int AddDamageValue = 15;
+        private int _armor = 10;
+        private int _damage = 15;
 
         public void OnMount()
         {
-            Data.AddArmorUnit(-RemoveArmorValue);
-            Data.AddDamageUnit(AddDamageValue);
-            
+            Data.AddArmorUnit(-_armor);
+            Data.AddDamageUnit(_damage);
         }
 
         public void OnUnmount()
         {
-            Data.AddArmorUnit(RemoveArmorValue);
-            Data.AddDamageUnit(-RemoveArmorValue);
+            Data.AddArmorUnit(_armor);
+            Data.AddDamageUnit(-_damage);
         }
 
         internal override string GetDescription()
         {
-            return "";
+            return "Owner of this dagger loses some armor, but gain some damage";
         }
     }
 }

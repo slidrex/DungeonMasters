@@ -31,7 +31,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         internal override string GetDescription()
         {
-            return "Does damage to attacker";
+            return "Reflects incoming damage to attacker. Only once";
         }
     }
 }

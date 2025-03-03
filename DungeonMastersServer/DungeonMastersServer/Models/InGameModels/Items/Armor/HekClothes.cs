@@ -21,7 +21,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         internal override string GetDescription()
         {
-            return "Allows clothes owner dodge 2 hits, after this, armor breaks";
+            return "Allows clothes owner dodge 2 hits, then it breaks";
         }
 
         public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)

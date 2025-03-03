@@ -9,15 +9,6 @@ namespace DungeonMastersServer.MessageHandlers
 {
     class MarketMessageHandler
     {
-        [MessageHandler((ushort)ClientToServerId.GAME_REQUESTHIT)]
-        public static void BuyItemRequestPackage(ushort fromClient, Message message)
-        {
 
-        }
-        [MessageHandler((ushort)ClientToServerId.GAME_REQUESTHIT)]
-        public static void SellItemRequestPackage(ushort fromClient, Message message)
-        {
-
-        }
     }
 }

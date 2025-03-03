@@ -24,7 +24,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items
 
         internal override string GetDescription()
         {
-            return "This golden artefact has 100 edges, every round you rolling it. If you get 7 - you double your current gold, if number more than 60, you get plus 15 gold, but if you get 9, you lose half of your max health";
+            return "This golden artifact has 100 edges, every round you rolling it. If you get 7 - you double your current gold, if number more than 60, you get plus 15 gold, but if you get 9, you lose half of your max health";
         }
     }
 }

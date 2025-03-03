@@ -4,23 +4,28 @@ using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 {
 
-    internal sealed class OsirisSceptre : Item, IHitItem, IHealItem
+    internal sealed class OsirisSceptre : Item, IUsable, IMountable
     {
         protected override SlotType SlotType => SlotType.Weapon;
-        public int Damage => 30;
+        private int _damage = 20;
 
-        public int Heal => 10;
+        private int _heal => 10;
         
         internal override string Title => "Osiris Sceptre";
         
-        public void OnHit(ushort targetId)
+        public void OnUse()
         {
-            
+            Data.Health += _heal;
         }
 
-        public void OnHeal(ushort targetId)
+        public void OnMount()
         {
-            
+            Data.AddDamageUnit(_damage);
+        }
+
+        public void OnUnmount()
+        {
+            Data.AddDamageUnit(-_damage);
         }
 
         internal override string GetDescription()

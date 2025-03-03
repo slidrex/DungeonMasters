@@ -15,7 +15,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         internal override string GetDescription()
         {
-            return "Grants 10 gold every hit on you";
+            return "Grants 10 gold every incoming hit";
         }
 
         public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)

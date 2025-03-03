@@ -42,7 +42,7 @@ namespace DungeonMastersServer.Services
             {
                 player.Value.SetPlayerStateData(new PlayerGameData());
             }
-
+            MarketService.Service.SendMarketItems();
             _ = GameService.Service.StartNewRound();
         }
         

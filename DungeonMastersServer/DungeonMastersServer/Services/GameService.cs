@@ -102,7 +102,6 @@ public class GameService : SingletonService<GameService>
 
     private void AddGoldInRoundStart(PlayerGameData playerGameData)
     {
-
        playerGameData.AddGold(10);
     }
     public async Task SetTimer(byte seconds, Action onTimerEnd)
