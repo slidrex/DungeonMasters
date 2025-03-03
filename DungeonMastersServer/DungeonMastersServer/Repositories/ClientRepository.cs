@@ -34,6 +34,18 @@ namespace DungeonMastersServer.Repositories
             
         }
 
+        public bool AreAllPlayersEndTurn()
+        {
+            return _players.Values.All(player => player.GetGameData().EndTurn);
+        }
+
+        public void SetEndTurn(ushort id, bool endTurn)
+        {
+            var player = GetPlayer(id);
+            var playerData = player.GetGameData();
+            playerData.EndTurn = endTurn;
+        }
+
         public int GetPlayerMaxHealth(ushort id)
         {
             var player = GetPlayer(id);

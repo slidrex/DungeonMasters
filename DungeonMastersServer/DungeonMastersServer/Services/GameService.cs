@@ -8,13 +8,13 @@ namespace DungeonMastersServer.Services;
 
 public enum RoundState
 {
-    RoundActive = 0,
-    RoundEnded = 1
+    BuyStage = 0,
+    GameStage = 1
 }
 
 public class GameService : SingletonService<GameService>
 {
-    private RoundState _roundState = RoundState.RoundEnded;
+    private RoundState _roundState = RoundState.BuyStage;
 
     public int RoundCounter { get; private set; } = 1;
     public void HitRequest(ushort target, ushort attacker, int damage)
@@ -58,9 +58,9 @@ public class GameService : SingletonService<GameService>
         playerGameData.HealPlayer(healAmount);
     }
 
-    public void StartNewRound()
+    public async Task StartNewRound()
     {
-        ClientService.Service.TransportAllPlayers();
+        ClientService.Service.TransportAllPlayers(10000);
         var players = ClientRepository.Service.GetPlayers();
 
         foreach (var player in players)
@@ -75,28 +75,41 @@ public class GameService : SingletonService<GameService>
             NetworkManager.Server.Send(msg, player.Key);
         }
         
-        _roundState = RoundState.RoundActive;
         RoundCounter++;
         Console.WriteLine($"New round: {RoundCounter}");
         ChatMessageService.Service.SendSystemChatMessage($"Round {RoundCounter} started");
-
+        
+        await Task.Delay(10000);
+        
+        _ = OnBuyStageEnd();
+        
         //Сначала фризим игроков на 10 секунд (идет закупка). После этого времени отправляем пакет {закупка окончена}.
 
         //Фриз кончился .отсчитываем 20 секунд раунда. После закупки и начала раунда, игроки могут отправить пакет I'm ready.
         //Если за 20 секунд раунда не все игроки отправили I'm ready отсчитывается 10 секунд после чего новый раунд начинается принудительно.
         //Если все игроки нажали Ready, все таймеры сбрасываются, включается новый 5 секундный таймер после чего новый раунд
     }
-    private void OnBuyStageEnd()
+    private async Task OnBuyStageEnd()
     {
+        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_BUY_STAGE_END);
+        NetworkManager.Server.SendToAll(msg);
 
+        await Task.Delay(30000);
+        
+        if (!ClientRepository.Service.AreAllPlayersEndTurn())
+            _ = OnAllPlayersPressedReady();
     }
-    private void PlayerPressedReady()
+    public void PlayerPressedReady(ushort playerId)
     {
-        //if some player press ready
+        ClientRepository.Service.SetEndTurn(playerId, true);
+        if (ClientRepository.Service.AreAllPlayersEndTurn())
+            _ = OnAllPlayersPressedReady();
     }
-    private void OnAllPlayersPressedReady()
+    private async Task OnAllPlayersPressedReady()
     {
-        //If all players press ready.
+        await Task.Delay(5000);
+
+        _ = StartNewRound();
     }
 
     private void AddGoldInRoundStart(PlayerGameData playerGameData)

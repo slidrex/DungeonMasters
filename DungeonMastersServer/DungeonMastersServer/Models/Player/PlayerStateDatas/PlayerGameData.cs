@@ -14,7 +14,6 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         Alive = 0,
         Dead = 1,
     }
-
     enum PlayerDebuffState
     {
         
@@ -36,6 +35,7 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         
         public PlayerLifeState LifeState { get; private set; }
 
+        public bool EndTurn { get; set; }
         public int Gold { get; private set; }
         private List<Item> _items = new List<Item>(); 
 

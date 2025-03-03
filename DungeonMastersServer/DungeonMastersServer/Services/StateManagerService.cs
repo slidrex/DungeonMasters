@@ -43,7 +43,7 @@ namespace DungeonMastersServer.Services
                 player.Value.SetPlayerStateData(new PlayerGameData());
             }
 
-            GameService.Service.StartNewRound();
+            _ = GameService.Service.StartNewRound();
         }
         
     }
