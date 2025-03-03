@@ -82,12 +82,6 @@ public class GameService : SingletonService<GameService>
         await Task.Delay(10000);
         
         _ = OnBuyStageEnd();
-        
-        //Сначала фризим игроков на 10 секунд (идет закупка). После этого времени отправляем пакет {закупка окончена}.
-
-        //Фриз кончился .отсчитываем 20 секунд раунда. После закупки и начала раунда, игроки могут отправить пакет I'm ready.
-        //Если за 20 секунд раунда не все игроки отправили I'm ready отсчитывается 10 секунд после чего новый раунд начинается принудительно.
-        //Если все игроки нажали Ready, все таймеры сбрасываются, включается новый 5 секундный таймер после чего новый раунд
     }
     private async Task OnBuyStageEnd()
     {
@@ -128,20 +122,4 @@ public class GameService : SingletonService<GameService>
         NetworkManager.Server.SendToAll(msg2);
         onTimerEnd.Invoke();
     }
-    /*
-    public async Task GameLoop()
-    {
-        if (_roundState == RoundState.RoundActive)
-        {
-            await Task.Delay(40000);
-            _roundState = RoundState.RoundEnded;
-            Console.WriteLine("Round end");
-            _ = GameLoop();
-        } else if (_roundState == RoundState.RoundEnded)
-        {
-            NewRound();
-            _ = GameLoop();
-        }
-    }
-    */
 }
