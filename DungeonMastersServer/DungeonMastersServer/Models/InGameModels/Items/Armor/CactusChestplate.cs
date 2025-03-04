@@ -13,7 +13,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
     {
         public int Armor => 25;
 
-        protected override SlotType SlotType => SlotType.Armor;
+        internal override SlotType SlotType => SlotType.Armor;
 
 
         internal override string Title => "Cactus armor";

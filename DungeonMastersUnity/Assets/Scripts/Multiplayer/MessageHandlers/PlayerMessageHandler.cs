@@ -16,6 +16,7 @@ namespace Multiplayer.MessageHandlers
         private Chat _chat;
         private static PlayerMessageHandler _singleton;
         [SerializeField] private HealthBar _healthBar;
+        private ItemStore _itemStorage;
 
         public static PlayerMessageHandler Singleton
         {
@@ -73,7 +74,24 @@ namespace Multiplayer.MessageHandlers
             }));
             
         }
+        public void HandleMarketable(string title, string description, byte type)
+        {
+            if(_itemStorage == null){
+                _itemStorage = FindFirstObjectByType<ItemStore>();
+            }
+            _itemStorage.AddItem(title, description, (SlotType)type);
+        }
+        
+        [MessageHandler((ushort)ServerToClientId.SEND_MARKETABLE_ITEMS)]
+        public static void HandleMarketableItems(Message message)
+        {
+            ushort writeCount = message.GetUShort();
+            
+            for(int i = 0; i < writeCount; i++){
+                Singleton.HandleMarketable(message.GetString(), message.GetString(), message.GetByte());
+            }
 
+        }
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
         public static void SendChatMessage(Message message)
         {

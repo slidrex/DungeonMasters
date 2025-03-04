@@ -6,7 +6,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
     internal sealed class SetSceptre : Item, IRoundDependant, IUsable, IMountable
     {
-        protected override SlotType SlotType => SlotType.Weapon;
+        internal override SlotType SlotType => SlotType.Weapon;
 
         internal override string Title => "Sceptre of Set's";
 

@@ -6,7 +6,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
     internal sealed class OsirisSceptre : Item, IUsable, IMountable
     {
-        protected override SlotType SlotType => SlotType.Weapon;
+        internal override SlotType SlotType => SlotType.Weapon;
         private int _damage = 20;
 
         private int _heal => 10;

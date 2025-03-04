@@ -16,7 +16,6 @@ namespace DungeonMastersServer
                 new LobbyService(), 
                 new ChatMessageService(),
                 new GameService(),
-                new MarketService(),
                 new MarketRepository());
         }
 

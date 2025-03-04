@@ -1,16 +1,10 @@
 ﻿using DungeonMastersServer.Models.Player.PlayerDatas;
-using DungeonMastersServer.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Abstract
 {
     internal abstract class Item
     {
-        protected abstract SlotType SlotType { get; }
+        internal abstract SlotType SlotType { get; }
         protected PlayerGameData Data { get; set; }
         internal abstract string Title { get;  }
         internal abstract string GetDescription();
@@ -22,9 +16,9 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Abstract
     }
     enum SlotType
     {
-        Magic,
-        Armor,
-        Weapon,
-        Artifact
+        Magic = 0,
+        Armor = 1,
+        Weapon = 2,
+        Artifact = 3
     }
 }

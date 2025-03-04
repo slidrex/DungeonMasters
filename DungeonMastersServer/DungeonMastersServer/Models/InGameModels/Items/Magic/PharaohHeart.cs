@@ -6,7 +6,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 
     internal sealed class PharaohHeart : Item, IUsable
     {
-        protected override SlotType SlotType => SlotType.Magic;
+        internal override SlotType SlotType => SlotType.Magic;
         
         internal override string Title => "Pharaoh's Heart";
 

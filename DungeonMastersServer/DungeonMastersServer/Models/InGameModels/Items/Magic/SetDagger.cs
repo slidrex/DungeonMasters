@@ -11,7 +11,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 {
     class SetDagger : Item, IMountable
     {
-        protected override SlotType SlotType => SlotType.Magic;
+        internal override SlotType SlotType => SlotType.Magic;
 
         internal override string Title => "Set's Dagger";
 

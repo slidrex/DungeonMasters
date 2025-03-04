@@ -1,14 +1,11 @@
-﻿using DungeonMastersServer.MessageHandlers;
+﻿
+using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Models.InGameModels.Items;
 using DungeonMastersServer.Models.InGameModels.Items.Armor;
 using DungeonMastersServer.Models.InGameModels.Items.Magic;
 using DungeonMastersServer.Models.InGameModels.Items.Weapons;
 using DungeonMastersServer.Models.InGameModels.Market;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Riptide;
 
 namespace DungeonMastersServer.Repositories
 {
@@ -43,6 +40,28 @@ namespace DungeonMastersServer.Repositories
         public MarketSlot[] GetMarketSlots()
         {
             return RegisterSlots();
+        }
+
+        public void SendMarketItems()
+        {
+            Console.WriteLine("Sending Market Items");
+            var marketItems = MarketRepository.Service.GetMarketSlots();
+
+            ushort slotsLength = (ushort)marketItems.Length;
+
+
+            var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.SEND_MARKETABLE_ITEMS);
+
+            msg.AddUShort(slotsLength);
+
+            foreach(var item in marketItems)
+            {
+                msg.AddString(item.Item.Title);
+                msg.AddString(item.Item.GetDescription());
+                msg.AddByte((byte)item.Item.SlotType);
+            }
+
+            NetworkManager.Server.SendToAll(msg);
         }
     }
 }

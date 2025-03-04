@@ -7,7 +7,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
     internal sealed class HekClothes : Item, IArmor
     {
-        protected override SlotType SlotType => SlotType.Armor;
+        internal override SlotType SlotType => SlotType.Armor;
         public int Armor => 0;
 
         

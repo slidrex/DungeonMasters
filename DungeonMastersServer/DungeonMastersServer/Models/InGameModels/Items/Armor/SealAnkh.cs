@@ -12,7 +12,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
     //Passive item
     class SealAnkh : Item, IIncomingDamageMultiplier
     {
-        protected override SlotType SlotType => SlotType.Magic;
+        internal override SlotType SlotType => SlotType.Magic;
 
 
         internal override string Title => "The seal of Ankh";

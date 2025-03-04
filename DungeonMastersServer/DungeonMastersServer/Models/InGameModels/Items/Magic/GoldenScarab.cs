@@ -6,7 +6,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items
 
     internal sealed class GoldenScarab : Item, IRoundDependant
     {
-        protected override SlotType SlotType => SlotType.Magic;
+        internal override SlotType SlotType => SlotType.Magic;
         internal override string Title => "Golden Scarab";
         
         public void OnRoundStarted()

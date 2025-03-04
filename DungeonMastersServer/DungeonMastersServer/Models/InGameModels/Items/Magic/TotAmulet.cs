@@ -7,7 +7,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 
     internal sealed class TotAmulet : Item, IRoundDependant
     {
-        protected override SlotType SlotType => SlotType.Magic;
+        internal override SlotType SlotType => SlotType.Magic;
 
         internal override string Title => "Tot's amulet";
         

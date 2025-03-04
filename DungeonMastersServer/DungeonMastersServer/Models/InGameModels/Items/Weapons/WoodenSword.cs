@@ -11,7 +11,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 {
     internal sealed class WoodenSword : Item, IMountable
     {
-        protected override SlotType SlotType => SlotType.Weapon;
+        internal override SlotType SlotType => SlotType.Weapon;
         
         private int _damage = 10;
 
