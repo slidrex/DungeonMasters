@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.Player.PlayerDatas;
 
 namespace DungeonMastersServer.Repositories
@@ -22,7 +23,13 @@ namespace DungeonMastersServer.Repositories
             return _players.ToArray();
         }
 
-
+        public List<Item> GetPlayerItems(ushort id)
+        {
+            var player = GetPlayer(id);
+            var playerGameData = player.GetGameData();
+            return playerGameData.GetPlayerItems();
+        }
+        
         public bool AreAllPlayersEndTurn()
         {
             return _players.Values.All(player => player.GetGameData().EndTurn);

@@ -97,12 +97,18 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         {
             _damageAddUnits += units;
         }
-        public void AttachItem(Item item)
+        public bool AttachItem(Item item)
         {
             if(item is IMountable mountable){
                 mountable.OnMount();
             }
+
+            if (_items.Count == 9)
+            {
+                return false;
+            }
             _items.Add(item);
+            return true;
         }
         public void DettachItem(Item item)
         {
@@ -155,10 +161,14 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
             Gold += amount;
         }
         
-        public void KillPlayer()
+        private void KillPlayer()
         {
             LifeState = PlayerLifeState.Dead;
         }
 
+        public List<Item> GetPlayerItems()
+        {
+            return _items;
+        }
     }
 }

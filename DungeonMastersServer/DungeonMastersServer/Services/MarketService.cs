@@ -47,4 +47,24 @@ public class MarketService : SingletonService<MarketService>
 
         NetworkManager.Server.Send(msg, playerId);
     }
+
+    public void SendPlayerItems(ushort playerId)
+    {
+        var playerItems = ClientRepository.Service.GetPlayerItems(playerId);
+        
+        ushort slotsLength = (ushort)playerItems.Count;
+
+        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.SEND_PLAYER_ITEMS);
+        
+        msg.AddUShort(slotsLength);
+
+        foreach (var item in playerItems)
+        {
+            msg.AddString(item.Title);
+            msg.AddString(item.GetDescription());
+            msg.AddByte((byte)item.SlotType);
+        }
+        
+        NetworkManager.Server.Send(msg, playerId);
+    }
 }

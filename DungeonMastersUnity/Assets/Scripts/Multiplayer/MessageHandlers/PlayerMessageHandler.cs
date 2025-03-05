@@ -93,6 +93,22 @@ namespace Multiplayer.MessageHandlers
 
         }
 
+        public void HandlePlayerItems(string title, string description, byte type)
+        {
+            
+        }
+        
+        [MessageHandler((ushort)ServerToClientId.SEND_PLAYER_ITEMS)]
+        private static void HandlePlayerItemsPackage(Message message)
+        {
+            ushort writeCount = message.GetUShort();
+
+            for (int i = 0; i < writeCount; i++)
+            {
+                Singleton.HandlePlayerItems(message.GetString(), message.GetString(), message.GetByte());
+            }
+        }
+        
         [MessageHandler((ushort)ServerToClientId.SEND_ITEM_STATS)]
         private void HandleItemStats(Message message)
         {

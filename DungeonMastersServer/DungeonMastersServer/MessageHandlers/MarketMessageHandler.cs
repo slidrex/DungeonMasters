@@ -16,5 +16,11 @@ namespace DungeonMastersServer.MessageHandlers
             string itemName = message.GetString();
             MarketService.Service.SendItemStats(fromClient, itemName);
         }
+
+        [MessageHandler((ushort)ClientToServerId.REQUEST_PLAYER_ITEMS)]
+        private static void RequestPlayerItemsPackage(ushort fromClient, Message message)
+        {
+            MarketService.Service.SendPlayerItems(fromClient);
+        }
     }
 }
