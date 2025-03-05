@@ -69,6 +69,12 @@ public class NetworkManager : MonoBehaviour
         message.AddString(itemName);
         Singleton.Client.Send(message);
     }
+
+    public static void SendPlayerItemsRequest()
+    {
+        Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.REQUEST_PLAYER_ITEMS);
+        Singleton.Client.Send(message);
+    }
     
     private void FixedUpdate()
     {
