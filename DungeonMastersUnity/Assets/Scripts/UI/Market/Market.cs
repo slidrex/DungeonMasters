@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using States;
 using UnityEngine;
 using UnityEngine.UI;
 public enum SlotType
@@ -12,9 +13,9 @@ public enum SlotType
 }
 namespace UI.Market
 {
-    internal class Market : MonoBehaviour
+    public class Market : MonoBehaviour
     {
-        public List<MarketSlot> MarketSlots; // слотыыыыыыыы мазагина!
+        public List<MarketSlot> MarketSlots;
         
         [SerializeField] private Button marketButton;
         [SerializeField] private GameObject marketPanel;
@@ -25,12 +26,15 @@ namespace UI.Market
         [SerializeField] private Button weaponButton;
         [SerializeField] private Button artifactButton;
         [SerializeField] private ItemStore _store;
+        
         private void Awake()
         {
+            ContextStateManager.RegisterState(State.Market, marketPanel.gameObject);
             MarketSlots = GetComponentsInChildren<MarketSlot>(true).ToList();
         }
         private void Start()
         {
+            SetActivePanel(false);
             magicButton.onClick.AddListener(OnMagicBtnClick);   
             armorButton.onClick.AddListener(OnArmorBtnClick);
             weaponButton.onClick.AddListener(OnWeaponBtnClick);
@@ -52,9 +56,12 @@ namespace UI.Market
         {
             RenderItems(SlotType.Artifact);
         }
+
+        public Button GetMarketButton() => marketButton;
+        
         private void RenderItems(SlotType type){
             var magic = _store.GetItemsOfType(type);
-            foreach(var slot in MarketSlots){slot.SetItem(null);}
+            foreach(var slot in MarketSlots) slot.ClearItem();
             int currentSlot = 0;
             foreach(var item in magic){
                 var sprite = item.Sprite;
@@ -63,9 +70,11 @@ namespace UI.Market
                 currentSlot++;
             }
         }
-        
-        
-        
+
+        public void DefaultRenderItems()
+        {
+            RenderItems(SlotType.Magic);
+        }
         
         private void OnEnable()
         {
@@ -82,12 +91,24 @@ namespace UI.Market
         #region MarketPanel
             private void OnMarketButtonClick() =>
                 SetActivePanel(!marketPanel.activeSelf);
-            public void ShowPanel() =>
-                SetActivePanel(true);
-            public void HidePanel() =>
-                SetActivePanel(false);
-            private void SetActivePanel(bool active) =>
-                marketPanel.SetActive(active);
+
+            public void ShowPanel()
+            {
+                ContextStateManager.SetState(State.Market);
+            }
+
+            public void HidePanel()
+            {
+                ContextStateManager.ClearState();
+            }
+
+            private void SetActivePanel(bool active)
+            {
+                marketButton.gameObject.SetActive(active);
+                
+                ContextStateManager.SetState(active ? State.Market : State.None);
+            }
+                
         #endregion
     }
 }

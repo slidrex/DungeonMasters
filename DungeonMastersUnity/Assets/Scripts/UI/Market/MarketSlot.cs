@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Market
 {
-    internal class MarketSlot : MonoBehaviour
+    public class MarketSlot : MonoBehaviour
     {
         [SerializeField] private Image itemImage;
         private Button _button;

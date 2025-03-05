@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
+using States;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.Chat
@@ -16,6 +19,15 @@ namespace UI.Chat
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private GameObject chatPanel;
         [SerializeField] private ScrollRect scrollRect;
+
+        private InputSystem_Actions _inputSystemActions;
+        private InputAction _closeAction;
+        private void Awake()
+        {
+            ContextStateManager.RegisterState(State.Chat, chatPanel.gameObject);
+            _inputSystemActions = new InputSystem_Actions();
+            _closeAction = _inputSystemActions.UI.Cancel;
+        }
 
         public void AddMessage(string username, string message)
         {
@@ -43,6 +55,11 @@ namespace UI.Chat
                     ShowChatPanel();
                     inputField.ActivateInputField();
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ContextStateManager.ClearState();
             }
         }
         
@@ -75,17 +92,12 @@ namespace UI.Chat
 
         public void ShowChatPanel()
         {
-            SetActivePanel(true);
+            ContextStateManager.SetState(State.Chat);
         }
 
         public void HideChatPanel()
         {
-            SetActivePanel(false);
-        }
-
-        private void SetActivePanel(bool active)
-        {
-            chatPanel.SetActive(active);
+            ContextStateManager.ClearState();
         }
     }
 }

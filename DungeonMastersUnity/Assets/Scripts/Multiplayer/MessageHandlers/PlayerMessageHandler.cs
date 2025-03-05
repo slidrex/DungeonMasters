@@ -6,6 +6,7 @@ using UI.Chat;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Compositors;
 using UI.Market;
 
 namespace Multiplayer.MessageHandlers
@@ -110,7 +111,7 @@ namespace Multiplayer.MessageHandlers
         }
         
         [MessageHandler((ushort)ServerToClientId.SEND_ITEM_STATS)]
-        private void HandleItemStats(Message message)
+        private static void HandleItemStats(Message message)
         {
             string itemString = message.GetString();
 
@@ -183,6 +184,22 @@ namespace Multiplayer.MessageHandlers
             }
             Singleton._healthBar.SetHealth(80, 100);
         }
+        
+        [MessageHandler((ushort)ServerToClientId.GAME_NEWROUND)]
+        private static void GameNewRound(Message message)
+        {
+            var market = GameCompositor.Singleton.Market;
+            market.GetMarketButton().gameObject.SetActive(true);
+            market.DefaultRenderItems();
+        }
+
+        [MessageHandler((ushort)ServerToClientId.GAME_BUY_STAGE_END)]
+        private static void GameBuyStageEnd(Message message)
+        {
+            GameCompositor.Singleton.Market.HidePanel();
+        }
+        
+        
         //TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO
         // СДЕЛАТЬ НА КЛИЕНТЕ ТЕ ЖЕ КЛАССЫ MarketSlot и Item и прочую хуйню чтобы нормально сериализовать строку в объект
         /*[MessageHandler((ushort)ServerToClientId.SEND_MARKETABLE_ITEMS)]
