@@ -92,6 +92,15 @@ namespace Multiplayer.MessageHandlers
             }
 
         }
+
+        [MessageHandler((ushort)ServerToClientId.SEND_ITEM_STATS)]
+        private void HandleItemStats(Message message)
+        {
+            string itemString = message.GetString();
+
+            var itemStats = JsonUtility.FromJson<Item>(itemString);
+        }
+        
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]
         public static void SendChatMessage(Message message)
         {

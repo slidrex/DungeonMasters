@@ -16,7 +16,8 @@ namespace DungeonMastersServer
                 new LobbyService(), 
                 new ChatMessageService(),
                 new GameService(),
-                new MarketRepository());
+                new MarketRepository(),
+                new MarketService());
         }
 
         private static NetworkManager _networkManager = null;

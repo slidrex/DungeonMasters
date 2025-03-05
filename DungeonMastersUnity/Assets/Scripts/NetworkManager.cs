@@ -62,6 +62,13 @@ public class NetworkManager : MonoBehaviour
         message.AddString(chatMessage);
         Singleton.Client.Send(message);
     }
+
+    public static void SendItemStatsRequest(string itemName)
+    {
+        Message message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerId.REQUEST_ITEM_STATS);
+        message.AddString(itemName);
+        Singleton.Client.Send(message);
+    }
     
     private void FixedUpdate()
     {
