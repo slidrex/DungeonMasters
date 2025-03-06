@@ -12,10 +12,6 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Abstract
         {
 
         }
-        public virtual ItemStat[] GetAdditionalStats()
-        {
-            return null;
-        }
 
     }
     enum SlotType

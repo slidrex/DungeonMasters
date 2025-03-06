@@ -11,12 +11,14 @@ public class Item
     public string Description;
     public SlotType Type;
     public Sprite Sprite;
-    public Item(string title, string desc, SlotType type, Sprite sprite)
+    public Dictionary<string, float> Stats;
+    public Item(string title, string desc, SlotType type, Sprite sprite, Dictionary<string, float> stats)
     {
         Title = title;
         Sprite = sprite;
         Description = desc;
         Type = type;
+        Stats = stats;
     }
 }
 
@@ -29,14 +31,14 @@ public class ItemStore : MonoBehaviour
         
     }
     
-    public void AddItem(string title, string desc, SlotType type){
+    public void AddItem(string title, string desc, SlotType type, Dictionary<string, float> stats){
         
         Sprite sprite = Resources.Load<Sprite>($"Items/{title}");
         if(sprite == null)
         {
             Debug.LogError($"Sprite not found {title}");
         }
-        var item = new Item(title, desc, type, sprite);
+        var item = new Item(title, desc, type, sprite, stats);
         _items.Add(item);
     }
     public IEnumerable<Item> GetItemsOfType(SlotType type){

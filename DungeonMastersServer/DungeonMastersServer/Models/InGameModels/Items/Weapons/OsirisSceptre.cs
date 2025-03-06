@@ -30,7 +30,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
         internal override string GetDescription()
         {
-            return "Can damage enemy or heal yourself";
+            return $"Heals on use by +{_heal}hp";
         }
     }
 }

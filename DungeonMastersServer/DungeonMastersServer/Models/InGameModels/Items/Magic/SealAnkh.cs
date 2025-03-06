@@ -29,7 +29,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 
         internal override string GetDescription()
         {
-            return "The seal of Ankh allows owner block all incoming magic damage. Just for once";
+            return "Blocking all magic damage, but then breaks";
         }
     }
 }

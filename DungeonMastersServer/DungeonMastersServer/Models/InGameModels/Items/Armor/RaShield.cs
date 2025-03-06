@@ -14,7 +14,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 
         public override void OnAfterHit(ushort attackerId, DamageType damageType)
         {
-            Data.AddGold(10);
+            Data.AddGold(_goldGrants);
         }
     }
 }

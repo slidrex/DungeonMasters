@@ -39,7 +39,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
         internal override string GetDescription()
         {
-            return "Grants you 5 gold every round, but takes for this 15 health every round";
+            return $"Can be activated, if active, than every round - 15hp and +5 gold";
         }
     }
 }

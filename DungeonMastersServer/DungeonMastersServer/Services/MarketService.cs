@@ -31,21 +31,18 @@ public class MarketService : SingletonService<MarketService>
             msg.AddString(item.Item.Title);
             msg.AddString(item.Item.GetDescription());
             msg.AddByte((byte)item.Item.SlotType);
+            
+            
+            var itemStats = item.Item.GetStats();
+            msg.AddInt(itemStats.Count);
+            foreach (var itemStat in itemStats)
+            {
+                msg.AddString(itemStat.Key);
+                msg.AddFloat(itemStat.Value);
+            }
         }
 
         NetworkManager.Server.SendToAll(msg);
-    }
-
-    public void SendItemStats(ushort playerId, string itemName)
-    {
-        Item? item = MarketRepository.Service.GetItemStats(itemName);
-
-        var itemString = JsonSerializer.Serialize(item, options);
-        
-        var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.SEND_ITEM_STATS);
-        msg.AddString(itemString);
-
-        NetworkManager.Server.Send(msg, playerId);
     }
 
     public void SendPlayerItems(ushort playerId)

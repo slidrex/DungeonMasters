@@ -75,12 +75,12 @@ namespace Multiplayer.MessageHandlers
             }));
             
         }
-        public void HandleMarketable(string title, string description, byte type)
+        public void HandleMarketable(string title, string description, byte type, Dictionary<string, float> stats)
         {
             if(_itemStorage == null){
                 _itemStorage = FindFirstObjectByType<ItemStore>();
             }
-            _itemStorage.AddItem(title, description, (SlotType)type);
+            _itemStorage.AddItem(title, description, (SlotType)type, stats);
         }
         
         [MessageHandler((ushort)ServerToClientId.SEND_MARKETABLE_ITEMS)]
@@ -88,8 +88,22 @@ namespace Multiplayer.MessageHandlers
         {
             ushort writeCount = message.GetUShort();
             
-            for(int i = 0; i < writeCount; i++){
-                Singleton.HandleMarketable(message.GetString(), message.GetString(), message.GetByte());
+            for(int i = 0; i < writeCount; i++)
+            {
+                var itemTitle = message.GetString();
+                var itemDescription = message.GetString();
+                var slotType = message.GetByte();
+
+                var statsLength = message.GetInt();
+
+                Dictionary<string, float> stats = new Dictionary<string, float>();
+                
+                for (int j = 0; j < statsLength; j++)
+                {
+                    stats.Add(message.GetString(), message.GetFloat());
+                }
+                
+                Singleton.HandleMarketable(itemTitle, itemDescription, slotType, stats);
             }
 
         }
@@ -108,14 +122,6 @@ namespace Multiplayer.MessageHandlers
             {
                 Singleton.HandlePlayerItems(message.GetString(), message.GetString(), message.GetByte());
             }
-        }
-        
-        [MessageHandler((ushort)ServerToClientId.SEND_ITEM_STATS)]
-        private static void HandleItemStats(Message message)
-        {
-            string itemString = message.GetString();
-
-            var itemStats = JsonUtility.FromJson<Item>(itemString);
         }
         
         [MessageHandler((ushort)ServerToClientId.playerChatMessage)]

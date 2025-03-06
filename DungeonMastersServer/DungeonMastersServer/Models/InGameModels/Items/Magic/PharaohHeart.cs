@@ -18,7 +18,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 
         internal override string GetDescription()
         {
-            return "Grants you +20 max health if you eat this. Bad taste";
+            return "Grants you +20 max health then you consume this";
         }
     }
 }

@@ -29,7 +29,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Weapons
 
         internal override string GetDescription()
         {
-            return $"Наносит {_damage} урона";
+            return $"Just deal damage";
         }
     }
 }

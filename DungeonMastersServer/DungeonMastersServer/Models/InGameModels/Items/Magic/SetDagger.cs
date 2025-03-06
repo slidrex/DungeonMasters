@@ -32,7 +32,7 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Magic
 
         internal override string GetDescription()
         {
-            return "Owner of this dagger loses some armor, but gain some damage";
+            return "Gain damage and lose armor";
         }
     }
 }

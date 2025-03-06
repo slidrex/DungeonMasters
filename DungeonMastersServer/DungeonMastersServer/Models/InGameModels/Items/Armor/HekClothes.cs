@@ -11,17 +11,13 @@ namespace DungeonMastersServer.Models.InGameModels.Items.Armor
         public override int Armor => 0;
         internal override string Title => "Hek Clothes";
 
-        public int Durability = 2;
-        public override ItemStat[] GetAdditionalStats()
-        {
-            return [ ItemStat.Create("Durability", Durability)];
-        }
+        private int _durability = 2;
         internal override string GetDescription() => "Allows clothes owner dodge 2 hits, then it breaks";
         public override void OnAfterHit(ushort attackerId, DamageType damageType)
         {
             // Dodge
-            Durability -= 1;
-            if (Durability == 1)
+            _durability -= 1;
+            if (_durability == 1)
                 BreakItem();
         }
     }
