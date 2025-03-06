@@ -39,6 +39,8 @@ internal enum ItemId
 
 public class GameService : SingletonService<GameService>
 {
+    private Task _currentRoundTask;
+    private CancellationTokenSource _cts = new();
     internal RoundState RoundState { get; private set; } = RoundState.None;
 
     public byte RoundCounter { get; private set; } = 0;
@@ -82,27 +84,47 @@ public class GameService : SingletonService<GameService>
     }
     private async Task OnBuyStageEnd()
     {
+        _cts?.Cancel(); 
+        _cts = new CancellationTokenSource();
+
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_BUY_STAGE_END);
         NetworkManager.Server.SendToAll(msg);
 
         RoundState = RoundState.GameStage;
 
-        await Task.Delay(30000);
-        
-        if (!ClientRepository.Service.AreAllPlayersEndTurn(out ushort readyPlayers, out ushort readyPlayersCount))
-            _ = OnAllPlayersPressedReady();
+        try
+        {
+            await Task.Delay(30000, _cts.Token);
+
+            if (!ClientRepository.Service.AreAllPlayersEndTurn(out ushort readyPlayers, out ushort readyPlayersCount))
+                _ = OnAllPlayersPressedReady();
+        }
+        catch (TaskCanceledException)
+        {
+            Console.WriteLine("Задержка отменена.");
+            return;
+        }
     }
-    
+
+    public void StopBuyStageTimer()
+    {
+        _cts.Cancel();
+    }
+
     public void PlayerPressedReady(ushort playerId)
     {
         ClientRepository.Service.SetEndTurn(playerId, true);
         bool areAllReady = ClientRepository.Service.AreAllPlayersEndTurn(out ushort readyPlayers, out ushort allPlayers);
 
         var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_TURN_END_RESPONSE);
-        msg.AddUShort(playerId);
-        msg.AddUShort(readyPlayers);
-        msg.AddUShort(allPlayers);
-        NetworkManager.Server.SendToAll(msg);
+        foreach(var player in ClientRepository.Service.GetPlayers())
+        {
+            msg.AddBool(ClientRepository.Service.IsPlayerEndTurn(player.Key));
+            msg.AddUShort(readyPlayers);
+            msg.AddUShort(allPlayers);
+            NetworkManager.Server.Send(msg, player.Key);
+        }
+        
 
         if (areAllReady)
             _ = OnAllPlayersPressedReady();
