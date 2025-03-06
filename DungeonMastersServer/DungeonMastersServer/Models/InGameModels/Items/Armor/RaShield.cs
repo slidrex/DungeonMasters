@@ -5,25 +5,14 @@ using DungeonMastersServer.Services;
 namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
 
-    internal sealed class RaShield : Item, IArmor
+    internal sealed class RaShield : ArmorItem
     {
-        internal override SlotType SlotType => SlotType.Armor;
-        public int Armor => 30;
+        public override int Armor => 30;
+        private int _goldGrants = 5;
+        internal override string Title => "Ra's Shield";        
+        internal override string GetDescription() => $"Grants {_goldGrants} gold every incoming hit";
 
-        internal override string Title => "Ra's Shield";
-
-
-        internal override string GetDescription()
-        {
-            return "Grants 10 gold every incoming hit";
-        }
-
-        public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)
-        {
-            incomingDamageMultiplier = 1;
-        }
-
-        public void OnAfterHit(ushort attackerId, DamageType damageType)
+        public override void OnAfterHit(ushort attackerId, DamageType damageType)
         {
             Data.AddGold(10);
         }

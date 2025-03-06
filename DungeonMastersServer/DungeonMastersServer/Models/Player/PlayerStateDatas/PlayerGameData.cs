@@ -1,5 +1,6 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
+using DungeonMastersServer.Models.InGameModels.Items.Armor;
 using DungeonMastersServer.Services;
 using Riptide;
 using System;
@@ -48,7 +49,10 @@ namespace DungeonMastersServer.Models.Player.PlayerDatas
         private int _damageAddUnits { get; set; }
         public void Damage(ushort attackerId, int damage, DamageType damageType)
         {
-            
+
+            var chest = new CactusChestplate();
+            chest.GetStats();
+
             foreach (var item in _items)
             {
 

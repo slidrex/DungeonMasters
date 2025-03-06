@@ -1,36 +1,25 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 using DungeonMastersServer.Services;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
 
-    internal sealed class HekClothes : Item, IArmor
+    internal sealed class HekClothes : ArmorItem
     {
-        internal override SlotType SlotType => SlotType.Armor;
-        public int Armor => 0;
-
-        
+        public override int Armor => 0;
         internal override string Title => "Hek Clothes";
 
         public int Durability = 2;
-        public void OnHit(ushort attackerId, DamageType damageType)
+        public override ItemStat[] GetAdditionalStats()
         {
-            
+            return [ ItemStat.Create("Durability", Durability)];
         }
-
-        internal override string GetDescription()
+        internal override string GetDescription() => "Allows clothes owner dodge 2 hits, then it breaks";
+        public override void OnAfterHit(ushort attackerId, DamageType damageType)
         {
-            return "Allows clothes owner dodge 2 hits, then it breaks";
-        }
-
-        public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)
-        {
-            incomingDamageMultiplier = 1;
-        }
-
-        public void OnAfterHit(ushort attackerId, DamageType damageType)
-        {
+            // Dodge
             Durability -= 1;
             if (Durability == 1)
                 BreakItem();

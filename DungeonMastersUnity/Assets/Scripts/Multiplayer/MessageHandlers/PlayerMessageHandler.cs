@@ -188,6 +188,12 @@ namespace Multiplayer.MessageHandlers
         [MessageHandler((ushort)ServerToClientId.GAME_NEWROUND)]
         private static void GameNewRound(Message message)
         {
+            byte round = message.GetByte();
+            int goldValue = message.GetInt();
+
+            GameCompositor.Singleton.SetUIRoundIndex(round);
+            GameCompositor.Singleton.SetGold(goldValue);
+
             var market = GameCompositor.Singleton.Market;
             market.GetMarketButton().gameObject.SetActive(true);
             market.DefaultRenderItems();

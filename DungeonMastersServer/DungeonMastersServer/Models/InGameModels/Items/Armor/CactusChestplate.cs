@@ -1,37 +1,18 @@
 ﻿using DungeonMastersServer.Models.InGameModels.Items.Abstract;
-using DungeonMastersServer.Models.InGameModels.Items.Abstract.Interfaces;
 using DungeonMastersServer.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DungeonMastersServer.Models.InGameModels.Items.Armor
 {
-    class CactusChestplate : Item, IArmor
+    class CactusChestplate : ArmorItem
     {
-        public int Armor => 25;
-
-        internal override SlotType SlotType => SlotType.Armor;
-
-
         internal override string Title => "Cactus armor";
+        public override int Armor => 25;
 
-        public void OnAfterHit(ushort attackerId, DamageType damageType)
+        private int _reflectDamage = 5; // Дамаг который возвращается аттакеру
+        internal override string GetDescription() => $"Reflects {_reflectDamage} damage to attacker";
+        public override void OnAfterHit(ushort attackerId, DamageType damageType)
         {
+            //бьем аттакера маг уронов на урон равный _reflectDamage
             BreakItem();
-        }
-
-        public void OnBeforeHit(ushort attackerId, DamageType damageType, out float incomingDamageMultiplier)
-        {
-            incomingDamageMultiplier = 1;
-        }
-
-
-        internal override string GetDescription()
-        {
-            return "Reflects incoming damage to attacker. Only once";
         }
     }
 }

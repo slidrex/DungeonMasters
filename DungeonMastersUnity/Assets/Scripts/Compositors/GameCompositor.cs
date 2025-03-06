@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UI.Chat;
 using UI.Market;
 using UnityEngine;
@@ -9,7 +10,15 @@ namespace Compositors
     {
         [field: SerializeField] public Market Market { get; private set; }
         [field: SerializeField] public Chat Chat { get; private set; }
-        
+        [SerializeField] private TextMeshProUGUI _roundIndex;
+        [SerializeField] private TextMeshProUGUI _goldIndex;
+
+        public void SetUIRoundIndex(byte index){
+            _roundIndex.text = index.ToString();
+        }
+        public void SetGold(int gold){
+            _goldIndex.text = gold.ToString();
+        }
         private static GameCompositor _singleton;
         public static GameCompositor Singleton
         {

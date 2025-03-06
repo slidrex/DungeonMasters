@@ -40,7 +40,7 @@ public class GameService : SingletonService<GameService>
 {
     private RoundState _roundState = RoundState.BuyStage;
     
-    public int RoundCounter { get; private set; } = 1;
+    public byte RoundCounter { get; private set; } = 0;
     public void HitRequest(ushort target, ushort attacker, int damage)
     {
         var attackerPlayer = ClientRepository.Service.GetPlayer(attacker);
@@ -56,6 +56,8 @@ public class GameService : SingletonService<GameService>
     {
         ClientService.Service.TransportAllPlayers(10000);
         var players = ClientRepository.Service.GetPlayers();
+        RoundCounter++;
+        Console.WriteLine($"New round: {RoundCounter}");
 
         foreach (var player in players)
         {
@@ -63,14 +65,13 @@ public class GameService : SingletonService<GameService>
             AddGoldInRoundStart(playerGameData);
             
             var msg = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.GAME_NEWROUND);
-            msg.AddInt(player.Key);
+            msg.AddByte(RoundCounter);
             msg.AddInt(playerGameData.Gold);
             
             NetworkManager.Server.Send(msg, player.Key);
         }
         
-        RoundCounter++;
-        Console.WriteLine($"New round: {RoundCounter}");
+        
         ChatMessageService.Service.SendSystemChatMessage($"Round {RoundCounter} started");
         
         await Task.Delay(10000);
