@@ -30,11 +30,27 @@ namespace DungeonMastersServer.Repositories
             return playerGameData.GetPlayerItems();
         }
         
-        public bool AreAllPlayersEndTurn()
+        public bool AreAllPlayersEndTurn(out ushort readyPlayers, out ushort playersCount)
         {
-            return _players.Values.All(player => player.GetGameData().EndTurn);
-        }
+            playersCount = (ushort)_players.Count;
+            readyPlayers = (ushort)_players.Values.Count(player => player.GetGameData().EndTurn);
 
+
+            return playersCount == readyPlayers;
+        }
+        public void SetAllEndTurnFalse()
+        {
+            foreach(var player in GetPlayers())
+            {
+                player.Value.GetGameData().EndTurn = false;
+            }
+        }
+        public bool IsPlayerEndTurn(ushort clientId)
+        {
+            var player = GetPlayer(clientId);
+            var playerData = player.GetGameData();
+            return playerData.EndTurn;
+        }
         public void SetEndTurn(ushort id, bool endTurn)
         {
             var player = GetPlayer(id);

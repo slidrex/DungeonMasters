@@ -12,6 +12,7 @@ namespace Compositors
         [field: SerializeField] public Chat Chat { get; private set; }
         [SerializeField] private TextMeshProUGUI _roundIndex;
         [SerializeField] private TextMeshProUGUI _goldIndex;
+        [field: SerializeField] public TurnMark TurnMark {get; private set;}
 
         public void SetUIRoundIndex(byte index){
             _roundIndex.text = index.ToString();

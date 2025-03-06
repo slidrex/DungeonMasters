@@ -188,8 +188,15 @@ namespace Multiplayer.MessageHandlers
         [MessageHandler((ushort)ServerToClientId.GAME_NEWROUND)]
         private static void GameNewRound(Message message)
         {
+
             byte round = message.GetByte();
             int goldValue = message.GetInt();
+            ushort playerCount = message.GetUShort();
+            
+            GameCompositor.Singleton.TurnMark.SetMark(false, 0, playerCount);
+            GameCompositor.Singleton.TurnMark.gameObject.SetActive(false);
+
+
 
             GameCompositor.Singleton.SetUIRoundIndex(round);
             GameCompositor.Singleton.SetGold(goldValue);
@@ -203,9 +210,17 @@ namespace Multiplayer.MessageHandlers
         private static void GameBuyStageEnd(Message message)
         {
             GameCompositor.Singleton.Market.HidePanel();
+            GameCompositor.Singleton.TurnMark.gameObject.SetActive(true);
         }
         
-        
+        [MessageHandler((ushort)ServerToClientId.GAME_TURN_END_RESPONSE)]
+        private static void TurnEndResponse(Message message){
+            ushort readyId  = message.GetUShort();
+            ushort readyCount = message.GetUShort();
+            ushort allPlayers = message.GetUShort();
+
+            GameCompositor.Singleton.TurnMark.SetMark(readyId == NetworkManager.Singleton.Client.Id, readyCount, allPlayers);
+        }
         //TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO_____TODO
         // СДЕЛАТЬ НА КЛИЕНТЕ ТЕ ЖЕ КЛАССЫ MarketSlot и Item и прочую хуйню чтобы нормально сериализовать строку в объект
         /*[MessageHandler((ushort)ServerToClientId.SEND_MARKETABLE_ITEMS)]

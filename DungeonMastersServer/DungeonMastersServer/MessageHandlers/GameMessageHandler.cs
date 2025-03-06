@@ -26,7 +26,13 @@ namespace DungeonMastersServer.MessageHandlers;
         [MessageHandler((ushort)ClientToServerId.GAME_REQUEST_END_TURN)]
         public static void HandleEndTurnRequestPackage(ushort fromClient, Message message)
         {
+        if(GameService.Service.RoundState == RoundState.GameStage && !ClientRepository.Service.IsPlayerEndTurn(fromClient)) {
             GameService.Service.PlayerPressedReady(fromClient);
+
         }
     }
+
+
+
+}
 
