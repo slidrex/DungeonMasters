@@ -1,4 +1,5 @@
-﻿using DungeonMastersServer.MessageHandlers;
+﻿using DungeonMastersServer.Logger;
+using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
 using Riptide;
@@ -42,7 +43,7 @@ namespace DungeonMastersServer.Services
             {
                 player.Value.SetPlayerStateData(new PlayerGameData());
             }
-            Console.WriteLine("Started game rounds loop");
+            MessageLogger.Log("Started game rounds loop");
             MarketService.Service.SendMarketItems();
             _ = GameService.Service.StartNewRound();
         }

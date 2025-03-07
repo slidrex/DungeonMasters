@@ -1,4 +1,5 @@
-﻿using ServerCore;
+﻿using DungeonMastersServer.Logger;
+using ServerCore;
 using Riptide.Utils;
 using DungeonMastersServer.Services;
 using DungeonMastersServer.Repositories;
@@ -46,8 +47,8 @@ namespace DungeonMastersServer
         }
         private static void MainThread()
         {
-            Console.WriteLine($"Main thread started");
-
+            MessageLogger.Log("Main thread started");
+            MessageLogger.Log("test");
             while (_isRunning)
             {
                 

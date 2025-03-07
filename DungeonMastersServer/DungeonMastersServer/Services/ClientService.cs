@@ -6,6 +6,7 @@ using DungeonMastersServer.Models.Player.PlayerDatas;
 using DungeonMastersServer.Repositories;
 using Riptide;
 using ServerCore.Utils;
+using DungeonMastersServer.Logger;
 
 namespace DungeonMastersServer.Services
 {
@@ -26,7 +27,7 @@ namespace DungeonMastersServer.Services
             {
                 NetworkManager.Server.DisconnectClient(fromClient);
             }
-            Console.WriteLine(username + " connected the game!");
+            MessageLogger.Log($"{username} connected the game");
             var player = new Models.Player.PlayerClient(fromClient, username, new PlayerLobbyData());
             ClientRepository.Service.AddPlayer(fromClient, player);
         }
@@ -78,7 +79,7 @@ namespace DungeonMastersServer.Services
         private void Server_ClientDisconnected(object? sender, ServerDisconnectedEventArgs e)
         {
             var senderId = e.Client.Id;
-            Console.WriteLine(ClientRepository.Service.GetPlayer(senderId).Username + " left the game!");
+            MessageLogger.Log($"{ClientRepository.Service.GetPlayer(senderId).Username} left the game");
             
             ClientRepository.Service.RemovePlayer(senderId);
 
@@ -99,7 +100,7 @@ namespace DungeonMastersServer.Services
                 StateManagerService.Service.SetState(GameState.InLobby);
             
             ClientRepository.Service.ClearPlayers();
-            Console.WriteLine("Server is empty, reloaded server");
+            MessageLogger.Log($"Server is empty, reloading server");
         }
         public void TransportPlayer(ushort fromClient, Vector2 position)
         {

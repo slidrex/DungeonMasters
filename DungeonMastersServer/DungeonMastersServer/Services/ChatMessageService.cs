@@ -1,4 +1,5 @@
-﻿using DungeonMastersServer.MessageHandlers;
+﻿using DungeonMastersServer.Logger;
+using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Repositories;
 using Riptide;
 
@@ -15,6 +16,7 @@ public class ChatMessageService : SingletonService<ChatMessageService>
         msg.AddString(playerNickname);
         msg.AddString(chatMessage);
         
+        MessageLogger.Log("Sending player chat message");
         NetworkManager.Server.SendToAll(msg);
     }
     public void SendSystemChatMessage(string chatMessage)
@@ -25,6 +27,7 @@ public class ChatMessageService : SingletonService<ChatMessageService>
         msg.AddString(playerNickname);
         msg.AddString(chatMessage);
 
+        MessageLogger.Log("Sending system chat message");
         NetworkManager.Server.SendToAll(msg);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using DungeonMastersServer.Logger;
 using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Models.InGameModels.Items.Abstract;
 using DungeonMastersServer.Repositories;
@@ -8,15 +9,9 @@ namespace DungeonMastersServer.Services;
 
 public class MarketService : SingletonService<MarketService>
 {
-    private static readonly JsonSerializerOptions options = new JsonSerializerOptions
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = false,
-    };
-    
     public void SendMarketItems()
     {
-        Console.WriteLine("Sending Market Items");
+        MessageLogger.Log("Sending market items");
         var marketItems = MarketRepository.Service.GetMarketSlots();
 
         ushort slotsLength = (ushort)marketItems.Length;
@@ -61,7 +56,7 @@ public class MarketService : SingletonService<MarketService>
             msg.AddString(item.GetDescription());
             msg.AddByte((byte)item.SlotType);
         }
-        
+        MessageLogger.Log($"Sending player: {ClientRepository.Service.GetPlayer(playerId).Username} items");
         NetworkManager.Server.Send(msg, playerId);
     }
 }

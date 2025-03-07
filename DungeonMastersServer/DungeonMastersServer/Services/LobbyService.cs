@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DungeonMastersServer.Logger;
 
 namespace DungeonMastersServer.Services
 {
@@ -24,7 +25,7 @@ namespace DungeonMastersServer.Services
 
             OnReadyChanged(username, isReady);
 
-            
+            MessageLogger.Log($"{username} pressed ready");
         }
         public void OnReadyChanged(string lastReadyUsername, bool isReady)
         {

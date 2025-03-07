@@ -1,4 +1,5 @@
-﻿using DungeonMastersServer.MessageHandlers;
+﻿using DungeonMastersServer.Logger;
+using DungeonMastersServer.MessageHandlers;
 using DungeonMastersServer.Models.InGameModels.Market;
 using DungeonMastersServer.Models.Player;
 using DungeonMastersServer.Models.Player.PlayerDatas;
@@ -60,7 +61,7 @@ public class GameService : SingletonService<GameService>
         ClientService.Service.TransportAllPlayers(10000);
         var players = ClientRepository.Service.GetPlayers();
         RoundCounter++;
-        Console.WriteLine($"New round: {RoundCounter}");
+        MessageLogger.Log($"New round: {RoundCounter}");
         ClientRepository.Service.SetAllEndTurnFalse();
         foreach (var player in players)
         {
@@ -101,7 +102,7 @@ public class GameService : SingletonService<GameService>
         }
         catch (TaskCanceledException)
         {
-            Console.WriteLine("Задержка отменена.");
+            MessageLogger.Log("Delay cancelled");
             return;
         }
     }
@@ -124,8 +125,6 @@ public class GameService : SingletonService<GameService>
             msg.AddUShort(allPlayers);
             NetworkManager.Server.Send(msg, player.Key);
         }
-        
-
         if (areAllReady)
             _ = OnAllPlayersPressedReady();
         
@@ -144,6 +143,7 @@ public class GameService : SingletonService<GameService>
     public async Task SetTimer(byte seconds, Action onTimerEnd)
     {
         RoundState = RoundState.None;
+        MessageLogger.Log($"Set timer: {seconds} seconds");
         await Task.Delay(seconds * 1000);
         var msg2 = Message.Create(MessageSendMode.Reliable, (ushort)ServerToClientId.REMOVE_UI_TIMER);
         NetworkManager.Server.SendToAll(msg2);
